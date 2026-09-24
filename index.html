@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phoenix Hub · Korea International School</title>
+<link rel="icon" href="assets/kis_logo_navy.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --kis-blue: #045DA9;
+    --kis-navy: #00284A;
+    --kis-slate: #44576B;
+    --kis-cyan: #00C4F6;
+    --kis-gold: #F5B900;
+    --kis-gray: #6a7482;
+    --kis-bg: #f4f6f8;
+    --kis-line: #d9dee3;
+    --font-disp: "Fraunces", "ivypresto-display", Georgia, serif;
+    --font-body: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  main section { scroll-margin-top: 150px; }
+  body {
+    font-family: var(--font-body);
+    color: var(--kis-navy);
+    background: var(--kis-bg);
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; text-decoration: none; }
+
+  /* ── Top bar ─────────────────────────── */
+  .topbar {
+    background: #fff;
+    border-bottom: 1px solid var(--kis-line);
+    position: sticky; top: 0; z-index: 50;
+  }
+  .topbar-inner {
+    max-width: 1180px; margin: 0 auto; padding: 10px 24px;
+    display: flex; align-items: center; gap: 16px;
+  }
+  .topbar img.logo { height: 54px; width: auto; }
+  .school-name {
+    font-family: var(--font-disp);
+    font-size: 21px; font-weight: 600; letter-spacing: .2px;
+    color: var(--kis-navy); line-height: 1.1;
+  }
+  .school-name small {
+    display: block; font-family: var(--font-body); font-weight: 700;
+    font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--kis-blue);
+    margin-top: 3px;
+  }
+  .topbar .search { margin-left: auto; }
+  .topbar input {
+    font-family: var(--font-body); font-size: 14px;
+    border: 1px solid var(--kis-line); border-radius: 999px;
+    padding: 8px 16px; width: 220px; outline: none;
+    color: var(--kis-navy); background: var(--kis-bg);
+  }
+  .topbar input:focus { border-color: var(--kis-blue); background: #fff; }
+
+  /* ── Section nav ─────────────────────── */
+  .secnav {
+    background: #fff; border-top: 1px solid var(--kis-bg);
+    overflow-x: auto; scrollbar-width: none;
+  }
+  .secnav::-webkit-scrollbar { display: none; }
+  .secnav-inner {
+    max-width: 1180px; margin: 0 auto; padding: 0 24px;
+    display: flex; gap: 4px; white-space: nowrap;
+  }
+  .secnav a, .secnav .qbtn {
+    font-size: 12.5px; font-weight: 700; color: var(--kis-slate);
+    padding: 9px 12px 10px; border-bottom: 2.5px solid transparent;
+    background: none; border-top: 0; border-left: 0; border-right: 0;
+    font-family: var(--font-body); cursor: pointer;
+  }
+  .secnav a:hover, .secnav .qbtn:hover { color: var(--kis-blue); border-bottom-color: var(--kis-gold); }
+  .secnav .qbtn .caret { font-size: 9px; margin-left: 4px; opacity: .7; }
+  .qmenu {
+    position: fixed; display: none; z-index: 100;
+    background: #fff; border: 1px solid var(--kis-line); border-radius: 12px;
+    box-shadow: 0 14px 34px rgba(0,40,74,.18); padding: 6px; min-width: 250px;
+  }
+  .qmenu.open { display: block; }
+  .qmenu a {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 13.5px; font-weight: 700; color: var(--kis-navy);
+    padding: 10px 12px; border-radius: 8px; border-bottom: 0;
+  }
+  .qmenu a:hover { background: var(--kis-bg); color: var(--kis-blue); border-bottom: 0; }
+  .qmenu a .qarrow { margin-left: auto; color: var(--kis-blue); font-weight: 400; }
+
+  /* ── Air quality banner ──────────────── */
+  .aqi-strip {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    padding: 7px 24px; font-size: 13.5px; font-weight: 700; letter-spacing: .3px;
+    background: var(--kis-slate); color: #fff;
+    transition: background .3s ease, color .3s ease;
+  }
+  .aqi-strip .aqi-kicker {
+    font-size: 11.5px; letter-spacing: 2.5px; text-transform: uppercase;
+    opacity: .8; font-weight: 700;
+  }
+  .aqi-strip .aqi-dot {
+    width: 9px; height: 9px; border-radius: 50%; background: currentColor;
+    box-shadow: 0 0 0 3px rgba(255,255,255,.25);
+  }
+  .aqi-strip .aqi-detail { font-weight: 400; opacity: .85; }
+  .aqi-strip .aqi-more { font-weight: 400; opacity: .7; font-size: 12px; }
+  @media (max-width: 640px) { .aqi-strip .aqi-detail { display: none; } }
+
+  /* ── Hero ────────────────────────────── */
+  .hero {
+    position: relative; color: #fff;
+    background:
+      linear-gradient(100deg, rgba(0,40,74,.93) 0%, rgba(0,40,74,.78) 45%, rgba(4,93,169,.55) 100%),
+      url("https://resources.finalsite.net/images/f_auto,q_auto,t_image_size_5/v1697489529/kiskr/rcb87jsmyaky1g0jtk1i/2023Cherries23.jpg") center 40%/cover no-repeat;
+  }
+  .hero-inner { max-width: 1180px; margin: 0 auto; padding: 60px 24px 52px; }
+  .hero .kicker {
+    font-size: 13px; font-weight: 700;
+    letter-spacing: 4px; text-transform: uppercase; opacity: .85;
+  }
+  .hero h1 {
+    font-family: var(--font-disp); font-weight: 500;
+    font-size: 54px; letter-spacing: .5px;
+    line-height: 1.06; margin: 12px 0 14px;
+  }
+  .hero p { font-size: 17px; font-weight: 300; max-width: 560px; opacity: .92; }
+  .hero .rule { width: 64px; height: 4px; background: var(--kis-gold); margin-top: 22px; }
+
+  /* ── Layout ──────────────────────────── */
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 40px 24px 24px; }
+  section { margin-bottom: 44px; }
+  h2 {
+    font-family: var(--font-disp); font-weight: 600;
+    font-size: 28px; letter-spacing: .3px;
+    color: var(--kis-navy); margin-bottom: 4px;
+  }
+  .sec-sub { font-size: 14px; color: var(--kis-gray); margin-bottom: 16px; }
+  h2::after { content: ""; display: block; width: 44px; height: 3px; background: var(--kis-gold); margin-top: 8px; }
+  .updated-tag { font-size: 12px; color: var(--kis-gray); font-weight: 400; }
+
+  /* ── Today band (lunch + events) ─────── */
+  .today-band { display: grid; gap: 18px; grid-template-columns: repeat(3, 1fr); margin-top: 18px; }
+  @media (max-width: 1020px) { .today-band { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 720px) { .today-band { grid-template-columns: 1fr; } }
+  .cc-dot { flex: none; width: 9px; height: 9px; border-radius: 50%; margin-top: 5px; }
+  .cc-row { display: flex; gap: 10px; align-items: flex-start; padding: 8px 6px; border-radius: 8px; }
+  .cc-row:hover { background: var(--kis-bg); }
+  .cc-row + .cc-row { border-top: 1px solid var(--kis-bg); }
+  .cc-row .t { font-size: 13px; font-weight: 700; line-height: 1.35; }
+  .cc-row .meta { font-size: 11.5px; color: var(--kis-gray); margin-top: 2px; }
+  .cc-daylabel {
+    font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--kis-blue); margin: 10px 0 2px; padding: 0 6px;
+  }
+  .cc-daylabel:first-child { margin-top: 0; }
+  .tcard {
+    background: #fff; border: 1px solid var(--kis-line); border-radius: 14px;
+    padding: 18px 20px; display: flex; flex-direction: column; height: 400px;
+    overflow: hidden;
+    transition: border-color .15s ease, box-shadow .15s ease;
+  }
+  .tcard:hover { border-color: var(--kis-blue); box-shadow: 0 8px 22px rgba(0,40,74,.10); }
+  .lunch-cols {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 14px; flex: 1;
+    align-content: start; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin;
+  }
+  @media (max-width: 480px) { .lunch-cols { grid-template-columns: 1fr; } }
+  .lunch-col h4 {
+    font-size: 11.5px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--kis-blue); border-bottom: 2px solid var(--kis-bg);
+    padding-bottom: 6px; margin-bottom: 8px;
+  }
+  .lunch-col ul { list-style: none; }
+  .lunch-col li { font-size: 13.5px; line-height: 1.45; padding: 4px 0 4px 14px; position: relative; }
+  .lunch-col li::before { content: ""; position: absolute; left: 0; top: 11px; width: 6px; height: 6px; border-radius: 50%; background: var(--kis-gold); }
+  .lunch-day-tag { font-size: 12.5px; font-weight: 400; color: var(--kis-gray); }
+  .ev-list { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; }
+  .ev-row { display: flex; gap: 14px; align-items: center; padding: 9px 6px; border-radius: 8px; }
+  .ev-row:hover { background: var(--kis-bg); }
+  .ev-row + .ev-row { border-top: 1px solid var(--kis-bg); }
+  .ev-date {
+    flex: none; width: 52px; text-align: center; border-radius: 9px;
+    background: rgba(4,93,169,.08); color: var(--kis-blue); padding: 7px 0 8px;
+  }
+  .ev-date .m { display: block; font-size: 10.5px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; }
+  .ev-date .d { display: block; font-family: var(--font-disp); font-size: 20px; font-weight: 600; line-height: 1.1; }
+  .ev-main .t { font-size: 13.5px; font-weight: 700; line-height: 1.3; }
+  .ev-main .meta { font-size: 12px; color: var(--kis-gray); margin-top: 2px; }
+
+  /* ── App grid ────────────────────────── */
+  .apps {
+    display: grid; gap: 10px;
+    grid-template-columns: repeat(auto-fill, minmax(108px, 1fr));
+    margin-top: 18px;
+  }
+  @media (min-width: 720px) { .apps { grid-template-columns: repeat(8, minmax(0, 1fr)); } }
+  .app {
+    background: #fff; border: 1px solid var(--kis-line); border-radius: 10px;
+    padding: 13px 8px 12px; text-align: center;
+    transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+  }
+  .app:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,40,74,.12); border-color: var(--kis-blue); }
+  .app .tile {
+    width: 40px; height: 40px; margin: 0 auto 8px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-disp); font-size: 14px; font-weight: 600; color: #fff;
+  }
+  .app .tile.icon { background: #fff; border: 1px solid var(--kis-line); padding: 5px; }
+  .app .tile.icon img { width: 100%; height: 100%; object-fit: contain; border-radius: 5px; }
+  .app .name { font-size: 12.5px; font-weight: 700; color: var(--kis-navy); }
+  .app .desc { font-size: 10.5px; color: var(--kis-gray); margin-top: 2px; }
+
+  /* ── Card grid ───────────────────────── */
+  .cards { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); margin-top: 18px; }
+  .card {
+    background: #fff; border: 1px solid var(--kis-line); border-radius: 10px;
+    padding: 20px 18px 18px; display: flex; flex-direction: column; gap: 12px;
+    align-items: flex-start;
+    transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+  }
+  .card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,40,74,.12); border-color: var(--kis-blue); }
+  .card .badge {
+    flex: none; width: 44px; height: 44px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-body); font-weight: 700; font-size: 13px; letter-spacing: 1px; color: #fff;
+  }
+  .badge.blue { background: var(--kis-blue); }
+  .badge.navy { background: var(--kis-navy); }
+  .badge.slate { background: var(--kis-slate); }
+  .badge.gold { background: var(--kis-gold); color: var(--kis-navy); }
+  .badge.cyan { background: #0096c7; }
+  .card h3 { font-size: 16.5px; font-weight: 700; line-height: 1.25; }
+  .card p { font-size: 13.5px; color: var(--kis-gray); margin-top: 4px; line-height: 1.45; }
+
+  /* ── Autoblock appointments ──────────── */
+  .dept-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 18px; }
+  .dept-tab {
+    font-family: var(--font-body); font-size: 13px; font-weight: 700;
+    border: 1px solid var(--kis-line); background: #fff; color: var(--kis-slate);
+    border-radius: 999px; padding: 8px 16px; cursor: pointer;
+    transition: background .12s ease, color .12s ease, border-color .12s ease;
+  }
+  .dept-tab:hover { border-color: var(--kis-blue); color: var(--kis-blue); }
+  .dept-tab.active { background: var(--kis-blue); border-color: var(--kis-blue); color: #fff; }
+  .teachers {
+    background: #fff; border: 1px solid var(--kis-line); border-radius: 12px;
+    margin-top: 14px; overflow: hidden;
+  }
+  .trow { display: flex; align-items: center; gap: 14px; padding: 13px 18px; }
+  .trow + .trow { border-top: 1px solid var(--kis-bg); }
+  .trow:hover { background: var(--kis-bg); }
+  .trow .room {
+    flex: none; min-width: 64px; text-align: center;
+    font-size: 12px; font-weight: 700; letter-spacing: .5px; color: var(--kis-blue);
+    background: rgba(4,93,169,.08); border-radius: 7px; padding: 5px 8px;
+  }
+  .trow .tmain { min-width: 0; flex: 1; }
+  .trow .tname { font-size: 14.5px; font-weight: 700; }
+  .trow .temail { font-size: 12.5px; color: var(--kis-gray); margin-top: 2px; word-break: break-all; }
+  .trow .temail a:hover { color: var(--kis-blue); text-decoration: underline; }
+  .trow .book {
+    flex: none; font-size: 12.5px; font-weight: 700; color: var(--kis-navy);
+    background: var(--kis-gold); border-radius: 999px; padding: 7px 15px;
+    transition: filter .12s ease;
+  }
+  .trow .book:hover { filter: brightness(1.06); }
+  .trow .book.off { background: var(--kis-line); color: var(--kis-gray); pointer-events: none; }
+  .ab-note { font-size: 12.5px; color: var(--kis-gray); margin-top: 10px; }
+
+  /* ── Widget board ────────────────────── */
+  .wgrid {
+    display: grid; gap: 18px;
+    grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+    margin-top: 18px;
+  }
+  .widget {
+    background: #fff; border: 1px solid var(--kis-line); border-radius: 14px;
+    padding: 18px 20px; height: 430px;
+    display: flex; flex-direction: column; overflow: hidden;
+    transition: border-color .15s ease, box-shadow .15s ease;
+  }
+  .widget:hover { border-color: var(--kis-blue); box-shadow: 0 8px 22px rgba(0,40,74,.10); }
+  .w-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; flex-shrink: 0; }
+  .w-icon {
+    width: 30px; height: 30px; border-radius: 9px; flex-shrink: 0; color: #fff;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .w-icon svg { width: 16px; height: 16px; stroke-width: 2; }
+  .w-title { font-family: var(--font-disp); font-weight: 600; font-size: 17px; color: var(--kis-navy); }
+  .w-link { margin-left: auto; font-size: 12.5px; font-weight: 700; color: var(--kis-blue); white-space: nowrap; }
+  .w-link:hover { text-decoration: underline; }
+  .w-body { flex: 1; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; }
+
+  /* Instagram mini-grid inside a widget */
+  .ig-mini { display: grid; gap: 8px; grid-template-columns: 1fr 1fr; }
+  .ig-item { position: relative; display: block; aspect-ratio: 1; overflow: hidden; border-radius: 8px; background: var(--kis-line); }
+  .ig-item img { width: 100%; height: 100%; object-fit: cover; transition: transform .25s ease; }
+  .ig-item:hover img { transform: scale(1.06); }
+  .ig-item .vid {
+    position: absolute; top: 8px; right: 8px; width: 22px; height: 22px;
+    border-radius: 50%; background: rgba(0,0,0,.55); color: #fff;
+    display: flex; align-items: center; justify-content: center; font-size: 10px;
+  }
+  .ig-follow-card {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+    height: 100%; border: 1px dashed var(--kis-line); border-radius: 10px;
+    font-size: 13px; font-weight: 700; color: var(--kis-blue); text-align: center; padding: 16px;
+  }
+  .ig-follow-card:hover { border-color: var(--kis-blue); }
+  .ig-follow-card .at { font-family: var(--font-disp); font-size: 18px; color: var(--kis-navy); }
+  .ig-follow-card img { width: 44px; height: 44px; opacity: .85; }
+
+  /* Row lists inside widgets (YouTube / news) */
+  .row { display: flex; gap: 12px; align-items: center; padding: 9px 6px; border-radius: 8px; }
+  .row:hover { background: var(--kis-bg); }
+  .row + .row { border-top: 1px solid var(--kis-bg); }
+  .row img.rthumb { width: 92px; height: 56px; object-fit: cover; border-radius: 7px; flex: none; background: var(--kis-line); }
+  .row .rmain { min-width: 0; }
+  .row .t { font-size: 13.5px; font-weight: 700; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .row .d { font-size: 11.5px; color: var(--kis-gray); margin-top: 3px; }
+  .chip {
+    display: inline-block; font-size: 10px; font-weight: 700;
+    letter-spacing: 1.5px; text-transform: uppercase; color: #fff;
+    padding: 3px 8px 2px; border-radius: 999px; margin-bottom: 4px;
+  }
+  .chip.IHE { background: var(--kis-navy); }
+  .chip.Forbes { background: var(--kis-slate); }
+  .chip.USN { background: var(--kis-blue); }
+  .chip.Niche { background: #737b17; }
+
+  /* ── Footer ──────────────────────────── */
+  footer {
+    background: var(--kis-navy); color: #b9c6d2;
+    margin-top: 24px; padding: 30px 24px;
+  }
+  .foot-inner { max-width: 1180px; margin: 0 auto; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .foot-inner img { height: 46px; }
+  .foot-inner .f-meta { margin-left: auto; font-size: 12.5px; text-align: right; line-height: 1.6; }
+  .foot-inner .f-meta b { color: #fff; }
+  .f-meta .visits {
+    display: flex; gap: 16px; justify-content: flex-end; align-items: center;
+    margin-top: 7px; min-height: 18px;
+  }
+  .vc-group { display: flex; align-items: center; gap: 6px; }
+  .vc-label {
+    font-size: 9px; letter-spacing: 1.8px; font-weight: 700;
+    color: #7f95a8; text-transform: uppercase;
+  }
+  .vc-digits { display: flex; gap: 2px; }
+  .vc-d {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 13px; height: 18px; border-radius: 3px; position: relative;
+    background: linear-gradient(#1c3d61 0%, #0f2a43 49%, #081f34 51%, #12304d 100%);
+    color: var(--kis-gold);
+    font-family: "SF Mono", Menlo, Consolas, "Courier New", monospace;
+    font-size: 11.5px; font-weight: 700; line-height: 1;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.09), inset 0 -1px 0 rgba(0,0,0,.35), 0 1px 2px rgba(0,0,0,.45);
+  }
+  .vc-d::after {
+    content: ""; position: absolute; left: 1px; right: 1px; top: 50%;
+    height: 1px; background: rgba(0,0,0,.5);
+  }
+
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <img class="logo" src="assets/kis_logo_navy.svg" alt="Korea International School">
+    <div class="school-name">Korea International School<small>Phoenix Hub · 2026–27</small></div>
+    <div class="search"><input id="q" type="search" placeholder="Search links & teachers…" autocomplete="off"></div>
+  </div>
+  <nav class="secnav">
+    <div class="secnav-inner">
+      <a href="#today-sec">Today</a>
+      <a href="#board-sec">News &amp; Media</a>
+      <a href="#apps-sec">Apps</a>
+      <a href="#docs-sec">Handbooks</a>
+      <a href="#guides-sec">Guides &amp; Forms</a>
+      <a href="#services-sec">Campus &amp; Services</a>
+      <a href="#ab-sec">Autoblock</a>
+      <button type="button" class="qbtn" id="qbtn">Quick Links<span class="caret">▼</span></button>
+    </div>
+  </nav>
+  <div class="qmenu" id="qmenu">
+    <a href="https://kis.schoology.com/" target="_blank" rel="noopener">Schoology<span class="qarrow">→</span></a>
+    <a href="https://kis.powerschool.com/public/" target="_blank" rel="noopener">PowerSchool<span class="qarrow">→</span></a>
+    <a href="https://test.mapnwea.org/#/lockdown" target="_blank" rel="noopener">MAP Testing<span class="qarrow">→</span></a>
+    <a href="https://sites.google.com/kis.or.kr/new-kis-students/home" target="_blank" rel="noopener">New Students Guide<span class="qarrow">→</span></a>
+    <a href="https://sites.google.com/kis.or.kr/kishsactivitiesathletics" target="_blank" rel="noopener">HS Activities &amp; Athletics<span class="qarrow">→</span></a>
+    <a href="http://172.16.1.17:8081/info/loginForm?clientLanguage=en" target="_blank" rel="noopener">Printer Dashboard<span class="qarrow">→</span></a>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdDBIutvlf-1_dOFCtN00uvFRsKSN7pz8oGC7O7BuXNN6eSbA/viewform" target="_blank" rel="noopener">Summer Camp Rec Letter Request<span class="qarrow">→</span></a>
+  </div>
+  <a class="aqi-strip" id="aqi" href="https://www.iqair.com/south-korea/gyeonggi-do/seongnam-si" target="_blank" rel="noopener">
+    <span class="aqi-kicker">Pangyo Air Quality</span>
+    <span class="aqi-dot"></span>
+    <span class="aqi-main" id="aqi-main">Loading…</span>
+    <span class="aqi-detail" id="aqi-detail"></span>
+    <span class="aqi-more">IQAir Seongnam →</span>
+  </a>
+</header>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="kicker">Pangyo · Seongnam · Korea</div>
+    <h1>Phoenix Hub</h1>
+    <p>Every app, guide, form, menu, and calendar for the KIS community — students, parents, and teachers — all in one place.</p>
+    <div class="rule"></div>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <!-- ══ Today at KIS ══ -->
+  <section id="today-sec">
+    <h2>Today at KIS</h2>
+    <div class="sec-sub" style="display:flex;gap:10px;align-items:baseline">Lunch and upcoming events, refreshed automatically. <span class="updated-tag" id="today-updated"></span></div>
+    <div class="today-band">
+
+      <div class="tcard" data-wid="lunch">
+        <div class="w-head">
+          <div class="w-icon" style="background:var(--kis-gold);color:var(--kis-navy)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h2a2 2 0 0 0 2-2V2"/><path d="M6 2v20M20 2c-2.2.9-3 2.5-3 5v6h3v9"/></svg>
+          </div>
+          <h3 class="w-title">Lunch <span class="lunch-day-tag" id="lunch-day"></span></h3>
+          <a class="w-link" id="lunch-pdf" href="https://www.kis.or.kr/parent-resources" target="_blank" rel="noopener">Full menu →</a>
+        </div>
+        <div class="lunch-cols" id="lunch-body">
+          <div class="sec-sub" style="grid-column:1/-1">Menu loading…</div>
+        </div>
+      </div>
+
+      <div class="tcard" data-wid="events">
+        <div class="w-head">
+          <div class="w-icon" style="background:var(--kis-blue)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+          </div>
+          <h3 class="w-title">Upcoming Events</h3>
+          <a class="w-link" href="https://www.kis.or.kr/academics/high-school" target="_blank" rel="noopener">HS calendar →</a>
+        </div>
+        <div class="ev-list" id="ev-body"></div>
+      </div>
+
+      <div class="tcard" data-wid="community">
+        <div class="w-head">
+          <div class="w-icon" style="background:var(--kis-slate)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <h3 class="w-title">Community Calendar</h3>
+          <a class="w-link" href="https://www.kis.or.kr/connect/school-calendar" target="_blank" rel="noopener">Full calendar →</a>
+        </div>
+        <div class="ev-list" id="cc-body"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══ News & media board ══ -->
+  <section id="board-sec">
+    <h2>News &amp; Media</h2>
+    <div class="sec-sub" style="display:flex;gap:10px;align-items:baseline">High school news, Instagram, KIS YouTube, college admissions headlines, and your notes. <span class="updated-tag" id="news-updated"></span></div>
+    <div class="wgrid">
+
+      <div class="widget" data-wid="kis-news">
+        <div class="w-head">
+          <div class="w-icon" style="background:var(--kis-navy)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8M15 18h-5M10 6h8v4h-8z"/></svg>
+          </div>
+          <h3 class="w-title">HS News</h3>
+          <a class="w-link" href="https://www.kis.or.kr/5tund3nt5-kis-news" target="_blank" rel="noopener">All news →</a>
+        </div>
+        <div class="w-body" id="kis-news-body"></div>
+      </div>
+
+      <div class="widget" data-wid="ig-pride">
+        <div class="w-head">
+          <div class="w-icon" style="background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+          </div>
+          <h3 class="w-title">KIS Pride</h3>
+          <a class="w-link" href="https://www.instagram.com/kispride/" target="_blank" rel="noopener">@kispride →</a>
+        </div>
+        <div class="w-body"><div class="ig-mini" id="ig-pride-body"></div></div>
+      </div>
+
+      <div class="widget" data-wid="ig-athletics">
+        <div class="w-head">
+          <div class="w-icon" style="background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+          </div>
+          <h3 class="w-title">KIS Athletics</h3>
+          <a class="w-link" href="https://www.instagram.com/kis_athletics/" target="_blank" rel="noopener">@kis_athletics →</a>
+        </div>
+        <div class="w-body"><div class="ig-mini" id="ig-athletics-body"></div></div>
+      </div>
+
+      <div class="widget" data-wid="ig-stuco">
+        <div class="w-head">
+          <div class="w-icon" style="background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+          </div>
+          <h3 class="w-title">KIS StuCo</h3>
+          <a class="w-link" href="https://www.instagram.com/kisstuco/" target="_blank" rel="noopener">@kisstuco →</a>
+        </div>
+        <div class="w-body"><div class="ig-mini" id="ig-stuco-body"></div></div>
+      </div>
+
+      <div class="widget" data-wid="yt-pride">
+        <div class="w-head">
+          <div class="w-icon" style="background:#FF0000">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="4"/><path d="M10 9l5 3-5 3z" fill="currentColor" stroke="none"/></svg>
+          </div>
+          <h3 class="w-title">KIS Pride TV</h3>
+          <a class="w-link" href="https://www.youtube.com/kispride" target="_blank" rel="noopener">YouTube →</a>
+        </div>
+        <div class="w-body" id="yt-pride-body"></div>
+      </div>
+
+      <div class="widget" data-wid="yt-live">
+        <div class="w-head">
+          <div class="w-icon" style="background:var(--kis-navy)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49M7.76 16.24a6 6 0 0 1 0-8.49M19.07 4.93a10 10 0 0 1 0 14.14M4.93 19.07a10 10 0 0 1 0-14.14"/></svg>
+          </div>
+          <h3 class="w-title">KIS Livestream</h3>
+          <a class="w-link" href="https://www.youtube.com/@kislivestream9506" target="_blank" rel="noopener">YouTube →</a>
+        </div>
+        <div class="w-body" id="yt-live-body"></div>
+      </div>
+
+      <div class="widget" data-wid="admissions">
+        <div class="w-head">
+          <div class="w-icon" style="background:var(--kis-blue)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/></svg>
+          </div>
+          <h3 class="w-title">College Admissions</h3>
+        </div>
+        <div class="w-body" id="admissions-body"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══ Apps ══ -->
+  <section id="apps-sec">
+    <h2>Daily Apps</h2>
+    <div class="sec-sub">Sign in with your @kis.or.kr Google account.</div>
+    <div class="apps">
+      <a class="app" href="https://kis.schoology.com/" target="_blank" rel="noopener">
+        <div class="tile icon"><img src="assets/icons/schoology.png" alt="Schoology" loading="lazy"></div>
+        <div class="name">Schoology</div><div class="desc">Courses &amp; assignments</div>
+      </a>
+      <a class="app" href="https://kis.powerschool.com/public/" target="_blank" rel="noopener">
+        <div class="tile icon"><img src="assets/icons/powerschool.png" alt="PowerSchool" loading="lazy"></div>
+        <div class="name">PowerSchool</div><div class="desc">Grades &amp; records</div>
+      </a>
+      <a class="app" href="https://mail.google.com/a/kis.or.kr" target="_blank" rel="noopener">
+        <div class="tile icon"><img src="assets/icons/gmail.png" alt="Gmail" loading="lazy"></div>
+        <div class="name">Gmail</div><div class="desc">School email</div>
+      </a>
+      <a class="app" href="https://drive.google.com/a/kis.or.kr" target="_blank" rel="noopener">
+        <div class="tile icon"><img src="assets/icons/drive.png" alt="Google Drive" loading="lazy"></div>
+        <div class="name">Google Drive</div><div class="desc">Files &amp; docs</div>
+      </a>
+      <a class="app" href="https://calendar.google.com/a/kis.or.kr" target="_blank" rel="noopener">
+        <div class="tile icon"><img src="assets/icons/calendar.png" alt="Google Calendar" loading="lazy"></div>
+        <div class="name">Google Calendar</div><div class="desc">Schedule</div>
+      </a>
+      <a class="app" href="https://test.mapnwea.org/#/lockdown" target="_blank" rel="noopener">
+        <div class="tile icon"><img src="assets/icons/map.png" alt="MAP Testing" loading="lazy"></div>
+        <div class="name">MAP Testing</div><div class="desc">NWEA lockdown browser</div>
+      </a>
+      <a class="app" href="http://172.16.1.17:8081/info/loginForm?clientLanguage=en" target="_blank" rel="noopener">
+        <div class="tile" style="background:var(--kis-slate)">⎙</div>
+        <div class="name">Printer Dashboard</div><div class="desc">Campus network only</div>
+      </a>
+      <a class="app" href="https://www.kis.or.kr/" target="_blank" rel="noopener">
+        <div class="tile" style="background:var(--kis-blue)">KIS</div>
+        <div class="name">KIS Website</div><div class="desc">kis.or.kr</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ══ Handbooks & documents ══ -->
+  <section id="docs-sec">
+    <h2>Handbooks &amp; Documents</h2>
+    <div class="sec-sub">Official High School references for 2026–27.</div>
+    <div class="cards">
+      <a class="card" href="https://docs.google.com/document/d/1NNCxub8UyOuEE9eJLfMZGWVsQ4tQ7pHp3H9AVPRNg-w/edit" target="_blank" rel="noopener">
+        <div class="badge blue">HB</div>
+        <div><h3>HS Handbook 2026–27</h3><p>Student &amp; family handbook — policies, expectations, and daily life.</p></div>
+      </a>
+      <a class="card" href="https://docs.google.com/document/d/1GDkdSuMORMG4qDiQyOr1S9hc5DQNOO6oWmvyMGjo838/edit" target="_blank" rel="noopener">
+        <div class="badge navy">CG</div>
+        <div><h3>Course &amp; Curriculum Guide</h3><p>2026–27 High School courses, pathways, and graduation requirements.</p></div>
+      </a>
+      <a class="card" href="https://resources.finalsite.net/images/v1785463050/kiskr/ffw9v192xzoiqgqtkd5t/26-27RotatingBlockSchedule.pdf" target="_blank" rel="noopener">
+        <div class="badge gold">BLK</div>
+        <div><h3>Rotating Block Schedule</h3><p>The 2026–27 rotating block schedule at a glance.</p></div>
+      </a>
+      <a class="card" id="profile-card" href="https://resources.finalsite.net/images/v1758255528/kiskr/ow2mlwipfgn3f4ukqq5w/2025-26KISSchoolProfile.pdf" target="_blank" rel="noopener">
+        <div class="badge slate">SP</div>
+        <div><h3>School Profile</h3><p>Official KIS school profile for college applications.</p></div>
+      </a>
+      <a class="card" href="https://resources.finalsite.net/images/v1718064766/kiskr/vihnqvyjb3ivfp6gcvqs/KISPhysicalExamForm2024-2025.pdf" target="_blank" rel="noopener">
+        <div class="badge cyan">MED</div>
+        <div><h3>Physical Exam Form</h3><p>KIS physical examination form for athletics and enrollment.</p></div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ══ Guides & forms ══ -->
+  <section id="guides-sec">
+    <h2>Guides &amp; Forms</h2>
+    <div class="sec-sub">Some links require your school Google account to open.</div>
+    <div class="cards">
+      <a class="card" href="https://sites.google.com/kis.or.kr/new-kis-students/home" target="_blank" rel="noopener">
+        <div class="badge blue">NEW</div>
+        <div><h3>New KIS Students</h3><p>Orientation guide and everything you need to get started at KIS.</p></div>
+      </a>
+      <a class="card" href="https://docs.google.com/document/d/1bLwrbvJPHA-yftKcdcZK_KTxGgOIZWFyeVVQ5pC3amM/edit" target="_blank" rel="noopener">
+        <div class="badge navy">MAP</div>
+        <div><h3>MAP Secure Browser Setup</h3><p>Step-by-step guide to install the NWEA secure testing browser on your Mac.</p></div>
+      </a>
+      <a class="card" href="https://docs.google.com/forms/d/e/1FAIpQLSdDBIutvlf-1_dOFCtN00uvFRsKSN7pz8oGC7O7BuXNN6eSbA/viewform" target="_blank" rel="noopener">
+        <div class="badge gold">REC</div>
+        <div><h3>Summer Camp Rec Letter Request</h3><p>Request a teacher recommendation letter for a summer camp or program.</p></div>
+      </a>
+      <a class="card" href="https://docs.google.com/spreadsheets/d/1Kqr88_6zzId3qKgsoQjbdUof0kimnqgXyNvqQTaqXgA/edit?gid=0" target="_blank" rel="noopener">
+        <div class="badge cyan">AB</div>
+        <div><h3>Autoblock Appointment Sheet</h3><p>The full teacher appointment spreadsheet, by department.</p></div>
+      </a>
+      <a class="card" href="https://sites.google.com/kis.or.kr/studentsleavingkis" target="_blank" rel="noopener">
+        <div class="badge slate">EXIT</div>
+        <div><h3>Students Leaving KIS</h3><p>Withdrawal process, records requests, and checkout steps.</p></div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ══ Campus & services ══ -->
+  <section id="services-sec">
+    <h2>Campus &amp; Services</h2>
+    <div class="sec-sub">Food, transport, athletics, and the school store.</div>
+    <div class="cards">
+      <a class="card" id="lunch-card" href="https://www.kis.or.kr/parent-resources" target="_blank" rel="noopener">
+        <div class="badge gold">🍽</div>
+        <div><h3>Lunch Menus</h3><p>This month's Cezars Kitchen menu PDF — link auto-updates.</p></div>
+      </a>
+      <a class="card" id="access-card" href="https://form.jotform.com/202118033692448" target="_blank" rel="noopener">
+        <div class="badge blue">KEY</div>
+        <div><h3>Access Pass</h3><p>Campus access pass request form.</p></div>
+      </a>
+      <a class="card" href="https://www.kis.or.kr/parent-resources" target="_blank" rel="noopener">
+        <div class="badge navy">BUS</div>
+        <div><h3>Busing</h3><p>Bus routes and transportation info on the KIS resources page.</p></div>
+      </a>
+      <a class="card" href="https://www.kis.or.kr/parent-resources" target="_blank" rel="noopener">
+        <div class="badge slate">PHX</div>
+        <div><h3>Phoenix Store</h3><p>School store info on the KIS resources page.</p></div>
+      </a>
+      <a class="card" href="https://lookerstudio.google.com/embed/reporting/6c26c2b7-4860-4d97-ba34-d9e98a4fa90b/page/dq3lF" target="_blank" rel="noopener">
+        <div class="badge gold">🏆</div>
+        <div><h3>House League Standings</h3><p>Live house points board — who's winning right now?</p></div>
+      </a>
+      <a class="card" href="https://sites.google.com/kis.or.kr/kishsactivitiesathletics" target="_blank" rel="noopener">
+        <div class="badge blue">HS</div>
+        <div><h3>HS Activities &amp; Athletics</h3><p>Seasons, schedules, and sign-ups for HS activities and athletics.</p></div>
+      </a>
+      <a class="card" href="https://kisac2013.weebly.com/" target="_blank" rel="noopener">
+        <div class="badge cyan">KISAC</div>
+        <div><h3>KISAC</h3><p>Korea International Schools Activities Conference.</p></div>
+      </a>
+      <a class="card" href="https://www.cezarskitchen.com/" target="_blank" rel="noopener">
+        <div class="badge gold">CK</div>
+        <div><h3>Cezars Kitchen</h3><p>KIS cafeteria food service provider.</p></div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ══ Autoblock appointments ══ -->
+  <section id="ab-sec">
+    <h2>Autoblock Appointments</h2>
+    <div class="sec-sub">If your regular teacher is not available during your autoblock, book another teacher — even if they don't teach your course, they may be able to help.</div>
+    <div class="dept-tabs" id="dept-tabs"></div>
+    <div class="teachers" id="teachers"></div>
+    <div class="ab-note">Booking opens the teacher's Google Calendar appointment page. Rooms are shown on the left.</div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="foot-inner">
+    <img src="assets/kis_logo_white.svg" alt="Korea International School">
+    <div class="f-meta">
+      <b>Korea International School · Phoenix Hub · 2026–27</b><br>
+      Developed by Dongchan Kim (Class of 2028)
+      <span class="visits" id="visit-stats"></span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/media.js"></script>
+<script>
+  const M = window.KIS_MEDIA || {};
+
+  // ── Lunch today (from monthly PDF snapshot) ──
+  (function renderLunch() {
+    const body = document.getElementById('lunch-body');
+    const dayTag = document.getElementById('lunch-day');
+    const pdfLink = document.getElementById('lunch-pdf');
+    const lunch = M.lunch || {};
+    if (lunch.url) pdfLink.href = lunch.url;
+    document.getElementById('lunch-card')?.setAttribute('href', lunch.url || 'https://www.kis.or.kr/parent-resources');
+    const days = lunch.days || {};
+    const fmt = d => d.toLocaleDateString('en-CA', { timeZone: 'Asia/Seoul' }); // YYYY-MM-DD
+    const today = new Date();
+    let key = fmt(today), label = 'Today';
+    if (!days[key]) {
+      // find the next school day with a menu (within 10 days)
+      for (let i = 1; i <= 10; i++) {
+        const d = new Date(today.getTime() + i * 86400000);
+        if (days[fmt(d)]) {
+          key = fmt(d);
+          label = d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', timeZone: 'Asia/Seoul' });
+          break;
+        }
+      }
+    }
+    const menu = days[key];
+    if (!menu) {
+      body.innerHTML = `<div class="sec-sub" style="grid-column:1/-1">No menu for today in the current snapshot — <a href="${lunch.url || 'https://www.kis.or.kr/parent-resources'}" target="_blank" rel="noopener" style="color:var(--kis-blue);font-weight:700">open this month's menu PDF →</a></div>`;
+      return;
+    }
+    dayTag.textContent = '· ' + label;
+    const col = (title, items) => `
+      <div class="lunch-col"><h4>${title}</h4>
+        <ul>${(items || []).map(i => `<li>${i}</li>`).join('') || '<li>—</li>'}</ul>
+      </div>`;
+    body.innerHTML = col('International', menu.international) + col('Korean', menu.korean);
+  })();
+
+  // ── Upcoming events ──
+  (function renderEvents() {
+    const el = document.getElementById('ev-body');
+    const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const fmt12 = t => {
+      if (!t) return '';
+      let [h, m] = t.split(':').map(Number);
+      const mer = h >= 12 ? 'PM' : 'AM';
+      h = h % 12 || 12;
+      return `${h}:${String(m).padStart(2,'0')} ${mer}`;
+    };
+    const evTodayKey = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Seoul' });
+    el.innerHTML = (M.events || []).filter(e => e.date >= evTodayKey).map(e => {
+      const [, mo, da] = e.date.split('-').map(Number);
+      const time = e.start ? fmt12(e.start) + (e.end ? '–' + fmt12(e.end) : '') : '';
+      const meta = [time, e.location].filter(Boolean).join(' · ');
+      return `<a class="ev-row" href="https://www.kis.or.kr/academics/high-school" target="_blank" rel="noopener">
+        <span class="ev-date"><span class="m">${MONTHS[mo-1]}</span><span class="d">${da}</span></span>
+        <div class="ev-main"><div class="t">${e.title}</div><div class="meta">${meta}</div></div>
+      </a>`;
+    }).join('') || '<div class="sec-sub">No upcoming events in the current snapshot — <a href="https://www.kis.or.kr/academics/high-school" target="_blank" rel="noopener" style="color:var(--kis-blue);font-weight:700">see the HS calendar →</a></div>';
+  })();
+
+  // ── Community calendar: today + the next few days ──
+  (function renderCommunity() {
+    const el = document.getElementById('cc-body');
+    // High-school lens: hide MS/ES-only calendars, keep HS + schoolwide ones
+    // (Academic Calendar, Athletics & After-School PK-12 apply to HS students too)
+    const ccHide = ['Middle School Calendar', 'Elementary School Calendar'];
+    const evs = (M.community || []).filter(e => !ccHide.includes(e.cal));
+    const todayKey = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Seoul' });
+    const upcoming = evs.filter(e => e.date >= todayKey).slice(0, 8);
+    if (!upcoming.length) {
+      el.innerHTML = '<div class="sec-sub">No upcoming items in the current snapshot — <a href="https://www.kis.or.kr/connect/school-calendar" target="_blank" rel="noopener" style="color:var(--kis-blue);font-weight:700">open the full calendar →</a></div>';
+      return;
+    }
+    const dayLabel = d => {
+      if (d === todayKey) return 'Today';
+      const [y, m, da] = d.split('-').map(Number);
+      return new Date(Date.UTC(y, m - 1, da)).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', timeZone: 'UTC' });
+    };
+    const fmt12 = t => {
+      if (!t) return '';
+      let [h, m] = t.split(':').map(Number);
+      const mer = h >= 12 ? 'PM' : 'AM';
+      h = h % 12 || 12;
+      return `${h}:${String(m).padStart(2,'0')} ${mer}`;
+    };
+    let html = '', lastDay = '';
+    for (const e of upcoming) {
+      if (e.date !== lastDay) {
+        html += `<div class="cc-daylabel">${dayLabel(e.date)}</div>`;
+        lastDay = e.date;
+      }
+      const meta = [fmt12(e.start), e.cal].filter(Boolean).join(' · ');
+      html += `<a class="cc-row" href="https://www.kis.or.kr/connect/school-calendar" target="_blank" rel="noopener">
+        <span class="cc-dot" style="background:${e.color}"></span>
+        <div><div class="t">${e.title}</div><div class="meta">${meta}</div></div>
+      </a>`;
+    }
+    el.innerHTML = html;
+  })();
+
+  // ── School profile / access pass auto-links ──
+  const L = (M.lunch || {}).links || {};
+  if (L.schoolProfile) document.getElementById('profile-card').href = L.schoolProfile;
+  if (L.accessPass) document.getElementById('access-card').href = L.accessPass;
+
+  // ── Instagram grids ──
+  function renderIG(elId, account, profileUrl) {
+    const el = document.getElementById(elId);
+    const data = (M.instagram || {})[account];
+    if (!data || !data.posts?.length) {
+      el.style.display = 'block';
+      el.innerHTML = `<a class="ig-follow-card" href="${profileUrl}" target="_blank" rel="noopener">
+        <img src="assets/kis_logo_navy.svg" alt=""><span class="at">@${account}</span><span>See latest posts →</span></a>`;
+      return;
+    }
+    el.innerHTML = data.posts.map(p => `
+      <a class="ig-item" href="https://www.instagram.com/p/${p.code}/" target="_blank" rel="noopener" title="${(p.caption||'').replace(/"/g,'&quot;')}">
+        <img src="${p.img}" alt="Instagram post" loading="lazy">
+        ${p.video ? '<span class="vid">▶</span>' : ''}
+      </a>`).join('');
+  }
+  renderIG('ig-pride-body', 'kispride', 'https://www.instagram.com/kispride/');
+  renderIG('ig-athletics-body', 'kis_athletics', 'https://www.instagram.com/kis_athletics/');
+  renderIG('ig-stuco-body', 'kisstuco', 'https://www.instagram.com/kisstuco/');
+
+  // ── YouTube lists ──
+  function renderYT(elId, videos) {
+    document.getElementById(elId).innerHTML = (videos || []).map(v => `
+      <a class="row" href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener">
+        <img class="rthumb" src="https://i.ytimg.com/vi/${v.id}/mqdefault.jpg" alt="" loading="lazy">
+        <div class="rmain"><div class="t">${v.title}</div><div class="d">${v.published}</div></div>
+      </a>`).join('');
+  }
+  renderYT('yt-pride-body', (M.youtube || {}).kispride);
+  renderYT('yt-live-body', (M.youtube || {}).livestream);
+
+  // ── KIS High School news (fsEl_23479 on the KIS news page) ──
+  document.getElementById('kis-news-body').innerHTML = (M.kisNews || []).map(p => `
+    <a class="row" href="${p.url}" target="_blank" rel="noopener">
+      ${p.thumb ? `<img class="rthumb" src="${p.thumb}" alt="" loading="lazy">` : ''}
+      <div class="rmain"><div class="t">${p.title}</div><div class="d">${p.date}</div></div>
+    </a>`).join('') || '<div class="sec-sub">No posts in this snapshot — run refresh_media.py.</div>';
+
+  // ── College admissions news ──
+  document.getElementById('admissions-body').innerHTML = (M.admissions || []).map(a => `
+    <a class="row" href="${a.url}" target="_blank" rel="noopener">
+      <div class="rmain"><span class="chip ${a.tag}">${a.outlet}</span>
+      <div class="t">${a.title}</div><div class="d">${a.date}</div></div>
+    </a>`).join('') || '<div class="sec-sub">No headlines in this snapshot — run refresh_media.py.</div>';
+
+  if (M.updated) {
+    document.getElementById('news-updated').textContent = `Updated ${M.updated}`;
+    document.getElementById('today-updated').textContent = `Updated ${M.updated}`;
+  }
+
+  // ── Autoblock appointment directory (from the shared Google Sheet) ──
+  const DEPTS = [
+    { name: "Math", teachers: [
+      ["G306","Marla Beimer","marla.beimer@kis.or.kr","https://calendar.app.google/YEwNAgpRguimNU3s6"],
+      ["G400","Regina Lee","regina.lee@kis.or.kr","https://calendar.app.google/xJn7wU5u4WLGZnX1A"],
+      ["H506","Thaise Brower","thaise.brower@kis.or.kr","https://calendar.app.google/BTQGeZ4Mz5CnwoHF9"],
+      ["H502","Kelly Chang","kelly.chang@kis.or.kr","https://calendar.app.google/GrhDGzoYrqSve6rU9"],
+      ["H505","Adam Coyer","adam.coyer@kis.or.kr","https://calendar.app.google/24v6rpuYUEC3mA2g7"],
+      ["H501","Stacy Fitzgerald","stacy.fitzgerald@kis.or.kr","https://calendar.app.google/FFSjr93zTNJxfxkW6"],
+      ["H507","Rob Paul","rob.paul@kis.or.kr","https://calendar.app.google/8WHaijdYGgvtKw3u5"],
+      ["H500","Vivian Robert","vivian.robert@kis.or.kr","https://calendar.app.google/zDxTYcXrS3bumLUq9"],
+    ]},
+    { name: "English", teachers: [
+      ["H400","Anthony van Moppes","avanmoppes@kis.or.kr","https://calendar.app.google/AYc6Mji6JxgNCXUM9"],
+      ["H401","Antoinette Sandoval","antoinette.sandoval@kis.or.kr","https://calendar.app.google/Af3DCRnHDhS8LFhB9"],
+      ["H403","Holly Olson","holly.olson@kis.or.kr","https://calendar.app.google/YJpSRnjccpgtcj5W9"],
+      ["H404","Seth Pingel","seth.pingel@kis.or.kr","https://calendar.app.google/GsE4qzfn2cr5cekk7"],
+      ["H405","Micah Crochet","micah.crochet@kis.or.kr","https://calendar.app.google/WvNsVsPE2EsU36eJ6"],
+      ["H406","Phoebe Charrier","phoebe.charrier@kis.or.kr","https://calendar.app.google/VyRH8kEZ7CPgG8Bk9"],
+      ["H407","Ebonee Huston","ebonee.huston@kis.or.kr","https://calendar.app.google/YmQ1PpEEW5rno1W67"],
+    ]},
+    { name: "Science", teachers: [
+      ["H104","Brianna Clark","brianna.clark@kis.or.kr","https://calendar.app.google/BK33k9JZhGgy4Qc69"],
+      ["H103","Daphne Chandra","daphne.chandra@kis.or.kr","https://calendar.app.google/iWh11si5iDxsc5Jv6"],
+      ["G306","Marla Beimer","marla.beimer@kis.or.kr","https://calendar.app.google/vT6uTsowRSh6sEyc9"],
+      ["G307","Wade Hopkin","wade.hopkin@kis.or.kr","https://calendar.app.google/n6x7S7K4Wq6hFQuHA"],
+      ["H106","Jeong Joo","jeong.joo@kis.or.kr","https://calendar.app.google/XKVAjTcRWAkmUiU79"],
+      ["G303","Youngjee Kim","youngjee.kim@kis.or.kr","https://calendar.app.google/uKU6oinoGrcWBQco7"],
+      ["H105","Lenny Musungu","lenny.musungu@kis.or.kr","https://calendar.app.google/MjryTejeRfUAnSA37"],
+    ]},
+    { name: "Social Studies", teachers: [
+      ["G606","Russ Williams","russ.williams@kis.or.kr","https://calendar.app.google/ciWtyfNDAS4YXvA89"],
+      ["H404","Seth Pingel","seth.pingel@kis.or.kr","https://calendar.app.google/GsE4qzfn2cr5cekk7"],
+      ["G601","Mark Aldo","mark.aldo@kis.or.kr","https://calendar.app.google/XtjxYG3pEo8ZJHFZA"],
+      ["G608","Steve Powers","steve.powers@kis.or.kr","https://calendar.app.google/LNHGPrJ8YtdqWD1k7"],
+    ]},
+    { name: "World Languages", teachers: [
+      ["G500","Marianne Hamon","marianne.hamon@kis.or.kr","https://calendar.app.google/EPTXtGmHJ5Zd1Whx8"],
+      ["G504","Ashley McKeown","ashley.mckeown@kis.or.kr","https://calendar.app.google/bmvPnLfbYjnjtxKB9"],
+      ["G508","David Pallás","david.pallas@kis.or.kr","https://calendar.app.google/Ey4vQSrh7jGaJSat6"],
+      ["G505","Bego Mesa","bego.mesa@kis.or.kr",null],
+      ["G506","Christy Yang","christy.yang@kis.or.kr","https://calendar.app.google/7w7P5jwiy7JnQQ3Y6"],
+      ["G603","Rachel Chen","rachel.chen@kis.or.kr","https://calendar.app.google/eA6xUcAFTg2Vnc6t9"],
+    ]},
+    { name: "Performing Arts", teachers: [
+      ["H303","Samantha Shamburek","samantha.shamburek@kis.or.kr","https://calendar.app.google/YpXwnNHf7Po6G9Eg8"],
+      ["H306","Spencer Selbo","spencer.selbo@kis.or.kr","https://calendar.app.google/hEeEjiBRBDoyK4z48"],
+      ["MB 204","Jimin Lee","jimin.lee@kis.or.kr","https://calendar.app.google/V98UvPvqgtNAnaWT9"],
+      ["MB 105","Jack Brown","jack.brown@kis.or.kr","https://calendar.app.google/dZE2Mmc9DBcp4Nxe9"],
+      ["MB 107","Ross Jones","ross.jones@kis.or.kr","https://calendar.app.google/XdrXP82oh7otuuN66"],
+      ["HB 109","Sarah MacDonald","sarah.macdonald@kis.or.kr",null],
+    ]},
+    { name: "HS D&I", teachers: [
+      ["H301","Joyce Pereira","joyce.pereira@kis.or.kr","https://calendar.app.google/uTSN3cMJiXGSGvKt7"],
+      ["H201","Kevin Olson","kevin.olson@kis.or.kr","https://calendar.app.google/ej19JaCHYRJ3Ai67A"],
+      ["M","Carla Staffa","carla.staffa@kis.or.kr","https://calendar.app.google/MPWZpjqSRQMb9mRa9"],
+      ["H200","Valeria Villanueva","valeria.villanueva@kis.or.kr","https://calendar.app.google/rQqvbj37HGpn15c48"],
+    ]},
+    { name: "Student Support", teachers: [
+      ["H104","Karl Mejia","karl.mejia@kis.or.kr","https://calendar.app.google/JwPPUHWUa5BwVxsXA"],
+      ["H103","Muhammed Sapuan","muhammed.sapuan@kis.or.kr","https://calendar.app.google/in8p2UwbZ3P1eXyM9"],
+      ["G306","Gina Yoo","gina.yoo@kis.or.kr","https://calendar.app.google/qupCwDj4jbNpw8UG6"],
+      ["G307","Nuri Tak","ntak@kis.or.kr","https://calendar.app.google/2eWNAoFDXCKN3PwQ9"],
+    ]},
+  ];
+
+  const tabsEl = document.getElementById('dept-tabs');
+  const teachersEl = document.getElementById('teachers');
+  let activeDept = 0;
+
+  function renderTabs() {
+    tabsEl.innerHTML = DEPTS.map((d, i) =>
+      `<button type="button" class="dept-tab${i === activeDept ? ' active' : ''}" data-i="${i}">${d.name}</button>`
+    ).join('');
+  }
+  function teacherRow([room, name, email, link], deptName) {
+    return `<div class="trow">
+      <span class="room">${room}</span>
+      <div class="tmain">
+        <div class="tname">${name}${deptName ? ` <span style="font-weight:400;color:var(--kis-gray);font-size:12px">· ${deptName}</span>` : ''}</div>
+        <div class="temail"><a href="mailto:${email}">${email}</a></div>
+      </div>
+      ${link ? `<a class="book" href="${link}" target="_blank" rel="noopener">Book →</a>` : `<span class="book off">Email to book</span>`}
+    </div>`;
+  }
+  function renderTeachers() {
+    teachersEl.innerHTML = DEPTS[activeDept].teachers.map(t => teacherRow(t)).join('');
+  }
+  tabsEl.addEventListener('click', e => {
+    const b = e.target.closest('.dept-tab');
+    if (!b) return;
+    activeDept = +b.dataset.i;
+    renderTabs(); renderTeachers();
+  });
+  renderTabs(); renderTeachers();
+
+  // ── Quick Links dropdown ──
+  const qbtn = document.getElementById('qbtn');
+  const qmenu = document.getElementById('qmenu');
+  qbtn.addEventListener('click', e => {
+    e.stopPropagation();
+    const open = qmenu.classList.toggle('open');
+    if (open) {
+      const r = qbtn.getBoundingClientRect();
+      qmenu.style.top = (r.bottom + 6) + 'px';
+      const iw = window.innerWidth || document.documentElement.clientWidth || 9999;
+      qmenu.style.left = Math.max(12, Math.min(r.left, iw - qmenu.offsetWidth - 12)) + 'px';
+    }
+  });
+  document.addEventListener('click', e => {
+    if (!qmenu.contains(e.target)) qmenu.classList.remove('open');
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') qmenu.classList.remove('open');
+  });
+  window.addEventListener('scroll', () => qmenu.classList.remove('open'), { passive: true });
+
+  // ── Search filter across everything ──
+  const q = document.getElementById('q');
+  const SEL = '.app, .card, .ig-item, .row, .ev-row, .cc-row';
+  q.addEventListener('input', () => {
+    const term = q.value.trim().toLowerCase();
+
+    document.querySelectorAll(SEL).forEach(el => {
+      el.classList.toggle('hidden', term && !el.textContent.toLowerCase().includes(term));
+    });
+
+    // Teacher search: search across ALL departments
+    if (term) {
+      const matches = [];
+      DEPTS.forEach(d => d.teachers.forEach(t => {
+        if ((t[0] + ' ' + t[1] + ' ' + t[2] + ' ' + d.name).toLowerCase().includes(term)) matches.push([d.name, t]);
+      }));
+      teachersEl.innerHTML = matches.map(([dn, t]) => teacherRow(t, dn)).join('');
+      tabsEl.classList.add('hidden');
+      document.getElementById('ab-sec').classList.toggle('hidden', !matches.length);
+    } else {
+      tabsEl.classList.remove('hidden');
+      document.getElementById('ab-sec').classList.remove('hidden');
+      renderTeachers();
+    }
+
+    const visSel = SEL.split(', ').map(s => s + ':not(.hidden)').join(', ');
+    document.querySelectorAll('.widget, .tcard').forEach(w => {
+      if (w.dataset.wid === 'lunch') { w.classList.toggle('hidden', !!term); return; }
+      w.classList.toggle('hidden', term && !w.querySelector(visSel));
+    });
+    document.querySelectorAll('main section').forEach(sec => {
+      if (sec.id === 'ab-sec') return;
+      const visible = sec.querySelector(visSel);
+      sec.classList.toggle('hidden', term && !visible);
+    });
+  });
+
+  // ── Visitor counter (Abacus) ──
+  // Counts each browser at most once per day: the visit is stamped in
+  // localStorage, so refreshing or re-opening the page the same day only
+  // READS the counters (never increments them again).
+  (async () => {
+    const el = document.getElementById('visit-stats');
+    const BASE = 'https://abacus.jasoncameron.dev';
+    const NS = 'kis-phoenix-hub';
+    const day = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Seoul' });
+    let stamped = null;
+    try { stamped = localStorage.getItem('phx_visit'); } catch (e) {}
+    const mode = stamped === day ? 'get' : 'hit';
+    // Abacus rate-limits to ~1 request/sec per IP, so the two counters are
+    // fetched sequentially with a retry instead of in parallel.
+    const pause = ms => new Promise(res => setTimeout(res, ms));
+    const read = async (key) => {
+      for (let i = 0; i < 3; i++) {
+        try {
+          const r = await fetch(`${BASE}/${mode}/${NS}/${key}`);
+          if (r.ok) return (await r.json()).value ?? 0;
+        } catch (e) { return null; }
+        await pause(1150);
+      }
+      return 0;
+    };
+    const total = await read('total');
+    await pause(1050);
+    const today = await read('d-' + day);
+    if (total === null && today === null) return; // network blocked — show nothing
+    if (mode === 'hit') { try { localStorage.setItem('phx_visit', day); } catch (e) {} }
+    const tv = today ?? 0, av = total ?? 0;
+    const digits = (n, min) => Math.max(0, Math.round(n)).toString().padStart(min, '0')
+      .split('').map(c => `<span class="vc-d">${c}</span>`).join('');
+    const render = (t, a) => {
+      el.innerHTML =
+        `<span class="vc-group"><span class="vc-label">Today</span><span class="vc-digits">${digits(t, 3)}</span></span>` +
+        `<span class="vc-group"><span class="vc-label">Total</span><span class="vc-digits">${digits(a, 5)}</span></span>`;
+    };
+    // odometer roll-up on load
+    const t0 = performance.now(), dur = 1100;
+    const tick = now => {
+      const p = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+      render(tv * e, av * e);
+      if (p < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  })();
+
+  // ── Live air quality for Pangyo (Open-Meteo, no key) ──
+  (async () => {
+    const main = document.getElementById('aqi-main');
+    const detail = document.getElementById('aqi-detail');
+    const strip = document.getElementById('aqi');
+    const levels = [
+      [50,  'Good',                           '#009966', '#fff'],
+      [100, 'Moderate',                       '#b0891a', '#fff'],
+      [150, 'Unhealthy for Sensitive Groups', '#e07b28', '#fff'],
+      [200, 'Unhealthy',                      '#cc0033', '#fff'],
+      [300, 'Very Unhealthy',                 '#660099', '#fff'],
+      [999, 'Hazardous',                      '#7e0023', '#fff'],
+    ];
+    try {
+      const r = await fetch('https://air-quality-api.open-meteo.com/v1/air-quality?latitude=37.3897&longitude=127.1116&current=us_aqi,pm2_5,pm10&timezone=Asia%2FSeoul');
+      const d = (await r.json()).current;
+      const aqi = Math.round(d.us_aqi);
+      const [, label, bg, fg] = levels.find(([max]) => aqi <= max);
+      main.textContent = `AQI ${aqi} · ${label}`;
+      detail.textContent = `PM2.5 ${Math.round(d.pm2_5)} µg/m³ · PM10 ${Math.round(d.pm10)} µg/m³`;
+      strip.style.background = bg;
+      strip.style.color = fg;
+    } catch (e) {
+      main.textContent = 'Check today’s air quality';
+      detail.textContent = '';
+    }
+  })();
+</script>
+
+</body>
+</html>
