@@ -9,7 +9,12 @@ approves access.
 
 ## YouTube
 
-The latest saved channel videos are displayed from `assets/media.js`. Live API
-updates are deferred until a Google Cloud project and YouTube Data API key can
-be created. One server-side API key will serve both public channels; it should
-be stored in Vercel as `YOUTUBE_API_KEY`, never in client-side files.
+When configured, the page requests the six latest public uploads for both
+channels from `/api/youtube`. The Vercel function uses a server-side
+`YOUTUBE_API_KEY`; it is never sent to the browser. Responses are cached for
+one minute, open pages re-check every five minutes, and the saved
+`assets/media.js` videos remain as a fallback.
+
+Enable **YouTube Data API v3** in the Google Cloud project, create a key
+restricted to that API, and add it to the Vercel project's Production
+environment as `YOUTUBE_API_KEY`. Redeploy after setting the variable.

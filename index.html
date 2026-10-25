@@ -780,15 +780,39 @@
   renderIG('ig-stuco-body', 'kisstuco', 'https://www.instagram.com/kisstuco/');
 
   // ── YouTube lists ──
+  // Live API titles are raw text, so escape them before building HTML.
+  const escYT = s => String(s ?? '').replace(/[&<>"']/g, c => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   function renderYT(elId, videos) {
     document.getElementById(elId).innerHTML = (videos || []).map(v => `
-      <a class="row" href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener">
-        <img class="rthumb" src="https://i.ytimg.com/vi/${v.id}/mqdefault.jpg" alt="" loading="lazy">
-        <div class="rmain"><div class="t">${v.title}</div><div class="d">${v.published}</div></div>
+      <a class="row" href="https://www.youtube.com/watch?v=${encodeURIComponent(v.id)}" target="_blank" rel="noopener">
+        <img class="rthumb" src="https://i.ytimg.com/vi/${encodeURIComponent(v.id)}/mqdefault.jpg" alt="" loading="lazy">
+        <div class="rmain"><div class="t">${escYT(v.title)}</div><div class="d">${escYT(v.published)}</div></div>
       </a>`).join('');
   }
   renderYT('yt-pride-body', (M.youtube || {}).kispride);
   renderYT('yt-live-body', (M.youtube || {}).livestream);
+  function refreshYT() {
+    fetch('/api/youtube')
+      .then(response => {
+        if (!response.ok) throw new Error(`YouTube refresh failed (${response.status})`);
+        return response.json();
+      })
+      .then(({ videos = {}, updatedAt }) => {
+        if (videos.kispride?.length) renderYT('yt-pride-body', videos.kispride);
+        if (videos.livestream?.length) renderYT('yt-live-body', videos.livestream);
+        if (updatedAt) {
+          const liveTime = new Date(updatedAt).toLocaleTimeString();
+          const mediaStatus = document.getElementById('media-updated');
+          mediaStatus.textContent = mediaStatus.textContent.replace(
+            /YouTube (snapshot|live .*)$/, `YouTube live ${liveTime}`);
+        }
+      })
+      .catch(() => {}); // Keep the saved snapshot visible if the API is unavailable.
+  }
+  refreshYT();
+  setInterval(refreshYT, 5 * 60 * 1000); // Pick up new uploads while the page stays open.
+
   // ── KIS High School news (fsEl_23479 on the KIS news page) ──
   document.getElementById('kis-news-body').innerHTML = (M.kisNews || []).map(p => `
     <a class="row" href="${p.url}" target="_blank" rel="noopener">
