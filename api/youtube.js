@@ -19,7 +19,7 @@ async function getLatest(channelId, apiKey) {
   if (!response.ok) {
     // Google's error reason (e.g. keyInvalid, quotaExceeded) never includes the key.
     const reason = await response.json()
-      .then(body => body.error?.errors?.[0]?.reason || body.error?.status)
+      .then(body => body.error?.message || body.error?.errors?.[0]?.reason)
       .catch(() => undefined);
     throw new Error(`YouTube API returned HTTP ${response.status}${reason ? ` (${reason})` : ""}`);
   }
@@ -41,7 +41,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const apiKey = process.env.YOUTUBE_API_KEY;
+  const apiKey = process.env.YOUTUBE_API_KEY?.trim().replace(/^["']|["']$/g, "");
   if (!apiKey) {
     return res.status(503).json({ error: "YouTube API is not configured" });
   }
