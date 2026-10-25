@@ -30,8 +30,8 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install scraper dependencies
-        run: python -m pip install --upgrade pip curl_cffi pdfplumber
+      - name: Install feed dependencies
+        run: python -m pip install --upgrade pip pdfplumber
 
       - name: Refresh KIS and social feeds
         id: refresh
@@ -55,4 +55,3 @@ jobs:
         run: |
           echo "One or more KIS sources failed. Successful feeds were committed; failed feeds retain their last successful data."
           exit 1
-

@@ -1,11 +1,8 @@
 #!/usr/bin/env python3
-"""Snapshot KIS school feeds plus the Instagram and YouTube exceptions
-into assets/media.js.
+"""Snapshot KIS school data into assets/media.js.
 
-Instagram CDN image URLs are signed and expire, so post thumbnails are
-downloaded into assets/insta/. YouTube thumbnails hotlink from i.ytimg.com
-(stable). Upcoming events are parsed from the server-rendered calendar on
-kis.or.kr/academics/high-school. GitHub Actions refreshes the snapshot daily; run this script manually for an immediate refresh.
+Instagram and YouTube stay as committed snapshots until their API integrations
+are available. Other school feeds are refreshed daily by GitHub Actions.
 
 Usage: python3 refresh_media.py
 """
@@ -16,15 +13,8 @@ INSTA_DIR = os.path.join(BASE, "assets", "insta")
 UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/126 Safari/537.36")
 
-IG_USERS = ["kispride", "kis_athletics", "kisstuco"]
-YT_CHANNELS = [
-    ("kispride", "UCb0vJLXOLeTzO-1BH-vwM9g"),      # KIS Pride
-    ("livestream", "UC_pnYI1H8Zbct0gP684S1Qg"),    # KIS Livestream
-]
 EVENTS_PAGE = "https://www.kis.or.kr/academics/high-school"
 EVENTS_ELEMENT = "19287"  # fsEl_19287 = HS Upcoming Events calendar slideshow
-N_POSTS = 6
-N_VIDEOS = 6
 
 
 def get(url, headers=None):
@@ -39,99 +29,6 @@ def get(url, headers=None):
             return r.stdout
         time.sleep(3 * (attempt + 1))
     raise RuntimeError(f"curl failed ({r.returncode}) for {url}")
-
-
-IG_APP_ID = {"x-ig-app-id": "936619743392459"}
-
-
-def get_ig(url):
-    # Instagram resets plain-curl TLS fingerprints; curl_cffi impersonation
-    # is required for the API endpoints (CDN image downloads are fine via curl)
-    from curl_cffi import requests as cffi_requests
-    resp = cffi_requests.get(url, headers=IG_APP_ID, impersonate="safari", timeout=30)
-    if resp.status_code != 200:
-        raise RuntimeError(f"HTTP {resp.status_code}: {resp.text[:80]}")
-    return resp.content
-
-
-def _save_post(ig_user, code, img_url, is_video, caption):
-    fname = f"{ig_user}_{code}.jpg"
-    with open(os.path.join(INSTA_DIR, fname), "wb") as f:
-        f.write(get(img_url))
-    print(f"  IG {code} saved")
-    return {"code": code, "img": f"assets/insta/{fname}",
-            "video": is_video, "caption": (caption or "")[:120]}
-
-
-def _ig_via_profile_api(ig_user):
-    url = f"https://www.instagram.com/api/v1/users/web_profile_info/?username={ig_user}"
-    user = json.loads(get_ig(url))["data"]["user"]
-    posts = []
-    for e in user["edge_owner_to_timeline_media"]["edges"][:N_POSTS]:
-        n = e["node"]
-        cap = n.get("edge_media_to_caption", {}).get("edges", [])
-        posts.append(_save_post(ig_user, n["shortcode"], n["display_url"],
-                                n.get("is_video", False),
-                                cap[0]["node"]["text"] if cap else ""))
-    return {"followers": user["edge_followed_by"]["count"], "posts": posts}
-
-
-IG_KNOWN_IDS = {}
-
-
-def _ig_via_feed_api(ig_user):
-    # Fallback for accounts where web_profile_info 400s: resolve the numeric
-    # id, then use the public feed endpoint.
-    uid = IG_KNOWN_IDS.get(ig_user)
-    if not uid:
-        # try plain curl first, then curl_cffi impersonation (login-wall bypass)
-        html = get(f"https://www.instagram.com/{ig_user}/").decode("utf-8", "replace")
-        m = re.search(r'"profile_id":"(\d+)"', html) or re.search(r"profilePage_(\d+)", html)
-        if not m:
-            html = get_ig(f"https://www.instagram.com/{ig_user}/").decode("utf-8", "replace")
-            m = re.search(r'"profile_id":"(\d+)"', html) or re.search(r"profilePage_(\d+)", html)
-        if not m:
-            raise RuntimeError("could not resolve profile id")
-        uid = m.group(1)
-    data = json.loads(get_ig(f"https://i.instagram.com/api/v1/feed/user/{uid}/?count=12"))
-    posts = []
-    for item in data.get("items", [])[:N_POSTS]:
-        media = item.get("carousel_media", [item])[0]
-        candidates = media.get("image_versions2", {}).get("candidates", [])
-        if not candidates:
-            continue
-        caption = (item.get("caption") or {}).get("text", "")
-        posts.append(_save_post(ig_user, item["code"], candidates[0]["url"],
-                                item.get("media_type") == 2, caption))
-    if not posts:
-        raise RuntimeError("feed endpoint returned no renderable items")
-    return {"followers": None, "posts": posts}
-
-
-def fetch_instagram(ig_user):
-    os.makedirs(INSTA_DIR, exist_ok=True)
-    first, second = ((_ig_via_feed_api, _ig_via_profile_api)
-                     if ig_user in IG_KNOWN_IDS
-                     else (_ig_via_profile_api, _ig_via_feed_api))
-    try:
-        return first(ig_user)
-    except Exception as ex:
-        print(f"  {first.__name__} failed ({ex}); trying {second.__name__}")
-        return second(ig_user)
-
-
-def fetch_youtube(channel_id):
-    xml = get(f"https://www.youtube.com/feeds/videos.xml?channel_id={channel_id}").decode()
-    entries = re.findall(
-        r"<entry>.*?<yt:videoId>([^<]+)</yt:videoId>.*?<title>([^<]+)</title>"
-        r".*?<published>([^<]+)</published>", xml, re.S)
-    videos = [{"id": vid, "title": _unescape(title), "published": pub[:10]}
-              for vid, title, pub in entries[:N_VIDEOS]]
-    for v in videos:
-        print(f"  YT {v['id']} {v['title'][:50]}")
-    return videos
-
-
 
 
 def _unescape(s):
@@ -391,24 +288,11 @@ def main():
 
     source_updated = dict(prev.get("sourceUpdated", {}))
     source_errors = {}
-    ig = {}
-    for ig_user in IG_USERS:
-        print("Fetching Instagram @" + ig_user)
-        ig[ig_user] = _refresh_source(
-            f"instagram:{ig_user}",
-            lambda user=ig_user: fetch_instagram(user),
-            prev.get("instagram", {}).get(ig_user, {}),
-            source_updated, source_errors)
-        time.sleep(5)
-
-    yt = {}
-    for key, cid in YT_CHANNELS:
-        print(f"Fetching YouTube {key}")
-        yt[key] = _refresh_source(
-            f"youtube:{key}",
-            lambda channel_id=cid: fetch_youtube(channel_id),
-            prev.get("youtube", {}).get(key, {}),
-            source_updated, source_errors)
+    # Keep social snapshots as offline fallbacks. Instagram will be updated
+    # manually until KIS approves an API integration; YouTube is fetched live
+    # by the Vercel endpoint in api/youtube.js.
+    ig = prev.get("instagram", {})
+    yt = prev.get("youtube", {})
 
     print("Fetching upcoming events from KIS")
     events = _refresh_source("events", fetch_events, prev.get("events", []),

@@ -360,6 +360,7 @@
     <div class="secnav-inner">
       <a href="#today-sec">Today</a>
       <a href="#board-sec">Media</a>
+      <a href="#college-sec">College Counseling</a>
       <a href="#apps-sec">Apps</a>
       <a href="#docs-sec">Handbooks</a>
       <a href="#guides-sec">Guides &amp; Forms</a>
@@ -444,7 +445,7 @@
   <!-- ══ Media board ══ -->
   <section id="board-sec">
     <h2>Media</h2>
-    <div class="sec-sub">College Counseling, Instagram, YouTube, and your notes.</div>
+    <div class="sec-sub">Instagram and YouTube. <span class="updated-tag" id="media-updated"></span></div>
     <div class="wgrid">
       <div class="widget" data-wid="ig-pride">
         <div class="w-head">
@@ -501,16 +502,22 @@
         <div class="w-body" id="yt-live-body"></div>
       </div>
 
-      <div class="widget" data-wid="admissions">
-        <div class="w-head">
-          <div class="w-icon" style="background:var(--kis-blue)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5"/></svg>
-          </div>
-          <h3 class="w-title">College Counseling</h3>
-        </div>
-        <div class="w-body" id="admissions-body"></div>
-      </div>
+    </div>
+  </section>
 
+  <!-- ══ College Counseling ══ -->
+  <section id="college-sec">
+    <h2>College Counseling</h2>
+    <div class="sec-sub">Counseling contacts and college application resources.</div>
+    <div class="cards">
+      <a class="card" href="https://www.kis.or.kr/academics/college-counseling" target="_blank" rel="noopener">
+        <div class="badge blue">CC</div>
+        <div><h3>Counseling &amp; Counselor Team</h3><p>Official KIS counseling overview and high school counselor contact information.</p></div>
+      </a>
+      <a class="card" id="profile-card" href="https://resources.finalsite.net/images/v1758255528/kiskr/ow2mlwipfgn3f4ukqq5w/2025-26KISSchoolProfile.pdf" target="_blank" rel="noopener">
+        <div class="badge slate">SP</div>
+        <div><h3>School Profile</h3><p>Official KIS school profile for college applications.</p></div>
+      </a>
     </div>
   </section>
 
@@ -570,10 +577,6 @@
       <a class="card" href="https://resources.finalsite.net/images/v1785463050/kiskr/ffw9v192xzoiqgqtkd5t/26-27RotatingBlockSchedule.pdf" target="_blank" rel="noopener">
         <div class="badge gold">BLK</div>
         <div><h3>Rotating Block Schedule</h3><p>The 2026–27 rotating block schedule at a glance.</p></div>
-      </a>
-      <a class="card" id="profile-card" href="https://resources.finalsite.net/images/v1758255528/kiskr/ow2mlwipfgn3f4ukqq5w/2025-26KISSchoolProfile.pdf" target="_blank" rel="noopener">
-        <div class="badge slate">SP</div>
-        <div><h3>School Profile</h3><p>Official KIS school profile for college applications.</p></div>
       </a>
       <a class="card" href="https://resources.finalsite.net/images/v1718064766/kiskr/vihnqvyjb3ivfp6gcvqs/KISPhysicalExamForm2024-2025.pdf" target="_blank" rel="noopener">
         <div class="badge cyan">MED</div>
@@ -767,7 +770,7 @@
       return;
     }
     el.innerHTML = data.posts.map(p => `
-      <a class="ig-item" href="https://www.instagram.com/p/${p.code}/" target="_blank" rel="noopener" title="${(p.caption||'').replace(/"/g,'&quot;')}">
+      <a class="ig-item" href="https://www.instagram.com/p/${p.code}/" target="_blank" rel="noopener" title="${p.published ? `${p.published} · ` : ''}${(p.caption||'').replace(/"/g,'&quot;')}">
         <img src="${p.img}" alt="Instagram post" loading="lazy">
         ${p.video ? '<span class="vid">▶</span>' : ''}
       </a>`).join('');
@@ -786,22 +789,12 @@
   }
   renderYT('yt-pride-body', (M.youtube || {}).kispride);
   renderYT('yt-live-body', (M.youtube || {}).livestream);
-
   // ── KIS High School news (fsEl_23479 on the KIS news page) ──
   document.getElementById('kis-news-body').innerHTML = (M.kisNews || []).map(p => `
     <a class="row" href="${p.url}" target="_blank" rel="noopener">
       ${p.thumb ? `<img class="rthumb" src="${p.thumb}" alt="" loading="lazy">` : ''}
       <div class="rmain"><div class="t">${p.title}</div><div class="d">${p.date}</div></div>
     </a>`).join('') || '<div class="sec-sub">No KIS news posts in the current snapshot — <a href="https://www.kis.or.kr/5tund3nt5-kis-news" target="_blank" rel="noopener">open KIS news →</a></div>';
-
-  // ── KIS College Counseling ──
-  document.getElementById('admissions-body').innerHTML = `
-    <a class="row" href="https://www.kis.or.kr/academics/college-counseling" target="_blank" rel="noopener">
-      <div class="rmain">
-        <div class="t">KIS College Counseling</div>
-        <div class="d">Official college guidance and resources from Korea International School</div>
-      </div>
-    </a>`;
 
   const sourceUpdated = M.sourceUpdated || {};
   const sourceErrors = M.sourceErrors || {};
@@ -814,6 +807,9 @@
   };
   document.getElementById('news-updated').textContent = updatedLabel(['kisNews']);
   document.getElementById('today-updated').textContent = updatedLabel(['lunch', 'community']);
+  document.getElementById('media-updated').textContent = updatedLabel([
+    'instagram:kispride', 'instagram:kis_athletics', 'instagram:kisstuco'
+    ]) + ' · YouTube snapshot';
 
   // ── Autoblock appointment directory (from the shared Google Sheet) ──
   const DEPTS = [
