@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Snapshot KIS Instagram + YouTube + admissions news + upcoming events
+"""Snapshot KIS school feeds plus the Instagram and YouTube exceptions
 into assets/media.js.
 
 Instagram CDN image URLs are signed and expire, so post thumbnails are
 downloaded into assets/insta/. YouTube thumbnails hotlink from i.ytimg.com
 (stable). Upcoming events are parsed from the server-rendered calendar on
-kis.or.kr/academics/high-school. Re-run this script any time to refresh.
+kis.or.kr/academics/high-school. GitHub Actions refreshes the snapshot daily; run this script manually for an immediate refresh.
 
 Usage: python3 refresh_media.py
 """
@@ -132,16 +132,6 @@ def fetch_youtube(channel_id):
     return videos
 
 
-import urllib.parse
-from email.utils import parsedate_to_datetime
-
-ADMISSIONS_OUTLETS = [
-    # (display name, tag, google-news query, expected " - Suffix" on titles)
-    ("Inside Higher Ed", "IHE", 'admissions source:"Inside Higher Ed" when:90d', "Inside Higher Ed"),
-    ("Forbes", "Forbes", 'college source:Forbes when:90d', "Forbes"),
-    ("U.S. News", "USN", 'college source:"U.S. News & World Report" when:90d', "U.S. News & World Report"),
-    ("Niche", "Niche", 'college source:Niche when:365d', "Niche"),
-]
 
 
 def _unescape(s):
@@ -149,51 +139,6 @@ def _unescape(s):
     return _html.unescape(re.sub(r"<!\[CDATA\[(.*?)\]\]>", r"\1", s, flags=re.S)).strip()
 
 
-def _items(xml):
-    return re.findall(r"<item>(.*?)</item>", xml, re.S)
-
-
-def _field(item, tag):
-    m = re.search(rf"<{tag}[^>]*>(.*?)</{tag}>", item, re.S)
-    return _unescape(m.group(1)) if m else ""
-
-
-def fetch_admissions():
-    articles = []
-    for name, tag, query, suffix in ADMISSIONS_OUTLETS:
-        url = ("https://news.google.com/rss/search?q=" + urllib.parse.quote(query)
-               + "&hl=en-US&gl=US&ceid=US:en")
-        # Google News RSS intermittently returns a valid-but-empty feed; retry
-        items = []
-        for attempt in range(5):
-            try:
-                items = _items(get(url).decode("utf-8", "replace"))
-            except Exception as ex:
-                print(f"  admissions {name} fetch error: {ex}")
-            if items:
-                break
-            time.sleep(4)
-        kept = 0
-        for item in items:
-            title = _field(item, "title")
-            if not title.endswith(" - " + suffix):
-                continue  # Google News mixes in other outlets; keep exact matches only
-            title = title[: -len(" - " + suffix)]
-            try:
-                dt = parsedate_to_datetime(_field(item, "pubDate"))
-            except Exception:
-                continue
-            articles.append({"outlet": name, "tag": tag, "title": title,
-                             "url": _field(item, "link"), "date": dt.strftime("%Y-%m-%d"),
-                             "_ts": dt.timestamp()})
-            kept += 1
-            if kept >= 3:
-                break
-        print(f"  admissions {name}: {kept} articles")
-    articles.sort(key=lambda a: -a["_ts"])
-    for a in articles:
-        a.pop("_ts")
-    return articles
 
 
 def fetch_events():
@@ -417,77 +362,83 @@ def fetch_lunch():
     return {"url": pdf_url, "label": label, "days": days, "links": links}
 
 
+def _timestamp():
+    return time.strftime("%Y-%m-%d %H:%M UTC", time.gmtime())
+
+
+def _refresh_source(key, fetcher, fallback, source_updated, source_errors):
+    try:
+        value = fetcher()
+    except Exception as ex:
+        source_errors[key] = str(ex)
+        print(f"  FAILED ({ex}); keeping previous snapshot if any")
+        return fallback
+    source_updated[key] = _timestamp()
+    source_errors.pop(key, None)
+    return value
+
+
 def main():
-    # Keep previously fetched data for accounts that fail this run
-    prev = {}
+    # Keep the last successful value and timestamp for any source that fails.
     out_path = os.path.join(BASE, "assets", "media.js")
+    prev = {}
     if os.path.exists(out_path):
         try:
-            prev = json.loads(open(out_path).read().split("window.KIS_MEDIA = ", 1)[1].rstrip().rstrip(";"))
+            previous_text = open(out_path, encoding="utf-8").read()
+            prev = json.loads(previous_text.split("window.KIS_MEDIA = ", 1)[1].rstrip().rstrip(";"))
         except Exception:
             prev = {}
+
+    source_updated = dict(prev.get("sourceUpdated", {}))
+    source_errors = {}
     ig = {}
     for ig_user in IG_USERS:
         print("Fetching Instagram @" + ig_user)
-        try:
-            ig[ig_user] = fetch_instagram(ig_user)
-        except Exception as ex:
-            print(f"  FAILED ({ex}); keeping previous snapshot if any")
-            if prev.get("instagram", {}).get(ig_user):
-                ig[ig_user] = prev["instagram"][ig_user]
+        ig[ig_user] = _refresh_source(
+            f"instagram:{ig_user}",
+            lambda user=ig_user: fetch_instagram(user),
+            prev.get("instagram", {}).get(ig_user, {}),
+            source_updated, source_errors)
         time.sleep(5)
+
     yt = {}
     for key, cid in YT_CHANNELS:
         print(f"Fetching YouTube {key}")
-        try:
-            yt[key] = fetch_youtube(cid)
-        except Exception as ex:
-            print(f"  FAILED ({ex}); keeping previous snapshot if any")
-            if prev.get("youtube", {}).get(key):
-                yt[key] = prev["youtube"][key]
-    print("Fetching admissions news")
-    admissions = fetch_admissions()
-    # Google News RSS often returns empty for a subset of outlets per run;
-    # keep the previous snapshot's articles for any outlet missing this run
-    got = {a["outlet"] for a in admissions}
-    carried = [a for a in prev.get("admissions", []) if a["outlet"] not in got]
-    if carried:
-        print(f"  carried over {len(carried)} previous articles for missing outlets")
-    admissions = sorted(admissions + carried, key=lambda a: a["date"], reverse=True)
-    print("Fetching upcoming events")
-    try:
-        events = fetch_events()
-    except Exception as ex:
-        print(f"  FAILED ({ex}); keeping previous snapshot if any")
-        events = prev.get("events", [])
+        yt[key] = _refresh_source(
+            f"youtube:{key}",
+            lambda channel_id=cid: fetch_youtube(channel_id),
+            prev.get("youtube", {}).get(key, {}),
+            source_updated, source_errors)
+
+    print("Fetching upcoming events from KIS")
+    events = _refresh_source("events", fetch_events, prev.get("events", []),
+                             source_updated, source_errors)
     print("Fetching KIS high school news")
-    try:
-        kis_news = fetch_kis_news()
-    except Exception as ex:
-        print(f"  FAILED ({ex}); keeping previous snapshot if any")
-        kis_news = prev.get("kisNews", [])
-    print("Fetching lunch menu")
-    try:
-        lunch = fetch_lunch()
-    except Exception as ex:
-        print(f"  FAILED ({ex}); keeping previous snapshot if any")
-        lunch = prev.get("lunch", {})
-    print("Fetching community calendar")
-    try:
-        community = fetch_community()
-    except Exception as ex:
-        print(f"  FAILED ({ex}); keeping previous snapshot if any")
-        community = prev.get("community", [])
-    updated = time.strftime("%Y-%m-%d %H:%M")
+    kis_news = _refresh_source("kisNews", fetch_kis_news, prev.get("kisNews", []),
+                               source_updated, source_errors)
+    print("Fetching lunch menu from KIS")
+    lunch = _refresh_source("lunch", fetch_lunch, prev.get("lunch", {}),
+                            source_updated, source_errors)
+    print("Fetching KIS community calendar")
+    community = _refresh_source("community", fetch_community,
+                                prev.get("community", []), source_updated, source_errors)
+
+    os.makedirs(os.path.dirname(out_path), exist_ok=True)
     with open(out_path, "w", encoding="utf-8") as f:
         f.write("// Generated by refresh_media.py — do not edit by hand\n")
         f.write("window.KIS_MEDIA = ")
-        json.dump({"updated": updated, "instagram": ig, "youtube": yt,
-                   "admissions": admissions, "events": events, "lunch": lunch,
-                   "community": community, "kisNews": kis_news},
+        json.dump({"updated": _timestamp(), "sourceUpdated": source_updated,
+                   "sourceErrors": source_errors, "instagram": ig, "youtube": yt,
+                   "events": events, "lunch": lunch, "community": community,
+                   "kisNews": kis_news},
                   f, ensure_ascii=False, indent=2)
         f.write(";\n")
     print(f"Wrote {out_path}")
+
+    failed_kis_sources = [key for key in ("events", "kisNews", "lunch", "community")
+                          if key in source_errors]
+    if failed_kis_sources:
+        raise SystemExit("KIS source refresh failed: " + ", ".join(failed_kis_sources))
 
 
 if __name__ == "__main__":
