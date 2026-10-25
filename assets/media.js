@@ -181,62 +181,11 @@ window.KIS_MEDIA = {
       },
       {
         "id": "R2sDo7aqfIQ",
-        "title": "MS Choir Concert",
+        "title": "MS Choir Concert",
         "published": "2026-05-26"
       }
     ]
   },
-  "admissions": [
-    {
-      "outlet": "Forbes",
-      "tag": "Forbes",
-      "title": "How To Choose A College In The Age Of AI",
-      "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxPaHBlU0NBaWpjOUgyX0l0Q3hFX29xRFBPejhnTzVUNHk1RVFrNVM3OUxQNTBWcGkycjRkRjBiNTFjYkw2dkw3M1U5NXlNNFJQMlB1RmdmMFNrQmlFRmJPcGZKSGhUOC1SY3NVbUd0a21YYzFsV2R2N2hlM2Z1TWtvaW9GNFNIMy1fUkpTaEZuR1M1Ny0tSFFyTHVn?oc=5",
-      "date": "2026-09-10"
-    },
-    {
-      "outlet": "Forbes",
-      "tag": "Forbes",
-      "title": "How We Rank America’s Best Colleges",
-      "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxPZ2psSlBEOGU4V1U2d1FGcEc5czhRRDFhUTFiMGROMGtBNHNHZHpNY2hncW1DT2xZclNUaWdiMElLZ2FPN3EwMnMwQWlHV0VQQ1FXVkJrZTJRRnJzS0JlT2hhLXpSTHhyNURwOUw4U3hWcmR3YUlHd0pIQkpFOEp4WVF6b1JUMVB3eWR4VVpseVlERmM?oc=5",
-      "date": "2026-09-10"
-    },
-    {
-      "outlet": "U.S. News",
-      "tag": "USN",
-      "title": "What Parents Need to Know About AI in K-12 Classrooms",
-      "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxQSWI1ck1YR2NxQTJ1dkRMZWZpRU44NzVuNnpsR3lGcjZyeE1LckhjbEFFNi1vZWswVHVMeXlZUjFGdGlkS1lPaVpTUWo2TmZKR1NDOXVFekIzdklBeWVDZ1gydmhVWmZhcC1lT2ZzQ3pYTEc2ZnVZbnAwUjV2by1QVzcxWHl3c25XT1JMSmo2eXFRa2Nic1I5NFVR?oc=5",
-      "date": "2026-08-06"
-    },
-    {
-      "outlet": "Inside Higher Ed",
-      "tag": "IHE",
-      "title": "Why the Admissions Process Is so Prone to Myths",
-      "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxNY0JqMFZrSHdHamU0NDJQMm1ueTdnaWlRRHhaM1J2UVNfZzVmdGV2bUswQ1V1N2tpRnd6MGhqbGVTMFIyeGVfYW80emxTQzJXcGs1bjZNSFo3WmppQWFCbU95NEZiZU9rTWdsUnE0aE1HSVpYeW4wZFNiMEU0XzB0Z1JKTVlQTDJSNVd0QlI5MTZPS1BmczhiRmF6ZHhtUEtfUTRtVWF3N0ZTR3pfWm8ycw?oc=5",
-      "date": "2026-08-04"
-    },
-    {
-      "outlet": "Inside Higher Ed",
-      "tag": "IHE",
-      "title": "Community Colleges Rethink Program Value",
-      "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxQMlpoUXJmblF0cG1CclRWZTVGYjBLVWUybFoycHNuakE0ci1IUGI3RTJXUlpTVnpKMnJyUEtNVVRDTk5QYmUzMU1yNnZDVjloNWtoRkNFS09TTHNiQ2ZWUzIwZ2RKRE5RTHhGNWFKYUxPMXhySU83aDcwT09xcWNlbGxUNC1vT21EUWI5Z1AzRlBKTXN3ZktjZXMwV1JRbEYxVmRTR1lIQXNEQlhXUU42aEJHengyS0UteXJyeURMWQ?oc=5",
-      "date": "2026-07-21"
-    },
-    {
-      "outlet": "Inside Higher Ed",
-      "tag": "IHE",
-      "title": "The Rise of the Nontraditional College Student",
-      "url": "https://news.google.com/rss/articles/CBMiuAFBVV95cUxOcFFvZmJNTFhUYnM0clRJSjJrdkpBZXB1cWt2VnJ2bDQxakJZU1k4b2J2Z09HelM3S3NOOGRrMFJvbU1WSXJLUFdDd2NtRDZabmNBUmUzV3JhRTNyUzl0QkRYY1NsOGZVSHV3OUZ2ckFWMng3cVFJSFhsWWhsMHlzc29ZVDI1Z0NDakFBZjhoZTh6OG5HNHRUOUVwV045ZHVNZHZZN3R4SGdJRmE3SktxVUxIb0NaTmY4?oc=5",
-      "date": "2026-07-16"
-    },
-    {
-      "outlet": "Forbes",
-      "tag": "Forbes",
-      "title": "The Hidden Incentives Behind Modern College Admissions",
-      "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxOLXZ6OGdSTjM2TlhKV3VTSkZBaWZmVldCQy1qQ2dwdFk0OFZCX1VqZDhUdjhTNjJORG5PTUhCZEJZUHlQa2pWdlRCZXVOMmx4eGpWZkk3REVoZ1RKMVE1U1g4Y1E4d3k1aHowYVZpb2FGY1loRVkyX0kzX2d1WW90Y25IZXozRzE4cmZNRG1kSmhGT0pna2xXNm1wTWhUa3RkR2hJbjZub2Y4QQ?oc=5",
-      "date": "2026-07-05"
-    }
-  ],
   "events": [
     {
       "date": "2026-09-29",
@@ -1230,5 +1179,12 @@ window.KIS_MEDIA = {
       "thumb": "https://resources.finalsite.net/images/f_auto,q_auto,t_image_size_1/v1765256881/kiskr/gnmmzettvjrm2bftimmy/ESUpcomingDates.png",
       "date": "2026-02-25"
     }
-  ]
+  ],
+  "sourceUpdated": {
+    "lunch": "2026-09-23 14:27",
+    "events": "2026-09-23 14:27",
+    "community": "2026-09-23 14:27",
+    "kisNews": "2026-09-23 14:27"
+  },
+  "sourceErrors": {}
 };
