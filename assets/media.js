@@ -181,7 +181,7 @@ window.KIS_MEDIA = {
       },
       {
         "id": "R2sDo7aqfIQ",
-        "title": "MS Choir Concert",
+        "title": "MS Choir Concert",
         "published": "2026-05-26"
       }
     ]
@@ -1188,3 +1188,4 @@ window.KIS_MEDIA = {
   },
   "sourceErrors": {}
 };
+
