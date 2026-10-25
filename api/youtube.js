@@ -17,7 +17,11 @@ async function getLatest(channelId, apiKey) {
     headers: { "X-Goog-Api-Key": apiKey },
   });
   if (!response.ok) {
-    throw new Error(`YouTube API returned HTTP ${response.status}`);
+    // Google's error reason (e.g. keyInvalid, quotaExceeded) never includes the key.
+    const reason = await response.json()
+      .then(body => body.error?.errors?.[0]?.reason || body.error?.status)
+      .catch(() => undefined);
+    throw new Error(`YouTube API returned HTTP ${response.status}${reason ? ` (${reason})` : ""}`);
   }
 
   const payload = await response.json();
@@ -54,7 +58,11 @@ export default async function handler(req, res) {
       updatedAt: new Date().toISOString(),
       videos: Object.fromEntries(entries),
     });
-  } catch {
-    return res.status(502).json({ error: "Could not refresh YouTube channels" });
+  } catch (err) {
+    console.error(err);
+    return res.status(502).json({
+      error: "Could not refresh YouTube channels",
+      detail: err.message,
+    });
   }
 }
