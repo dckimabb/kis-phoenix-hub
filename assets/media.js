@@ -6,9 +6,9 @@ window.KIS_MEDIA = {
     "events": "2026-11-07 00:57 UTC",
     "community": "2026-11-07 00:57 UTC",
     "kisNews": "2026-11-07 00:57 UTC",
-    "instagram:kispride": "2026-10-25 08:27 UTC",
-    "instagram:kis_athletics": "2026-10-25 08:27 UTC",
-    "instagram:kisstuco": "2026-10-25 08:27 UTC"
+    "instagram:kispride": "2026-11-07 12:39 UTC",
+    "instagram:kis_athletics": "2026-11-07 12:39 UTC",
+    "instagram:kisstuco": "2026-11-07 12:39 UTC"
   },
   "sourceErrors": {},
   "instagram": {
@@ -16,46 +16,46 @@ window.KIS_MEDIA = {
       "followers": null,
       "posts": [
         {
-          "code": "De03qLGj4hg",
-          "img": "assets/insta/kispride_De03qLGj4hg.jpg",
+          "code": "DfY0d94k7Nx",
+          "img": "assets/insta/kispride_DfY0d94k7Nx.jpg",
           "video": false,
-          "caption": "Second graders visited the zoo to learn more about endangered ani",
-          "published": "2026-10-22"
+          "caption": "This week fourth graders enjoyed an overnight at an outdoor cente",
+          "published": "2026-11-05"
         },
         {
-          "code": "DeyWWZoAcby",
-          "img": "assets/insta/kispride_DeyWWZoAcby.jpg",
+          "code": "DfTE3Bcj_dT",
+          "img": "assets/insta/kispride_DfTE3Bcj_dT.jpg",
           "video": false,
-          "caption": "This week KIS hosted a KAIAC VEX V5 Robotics scrimmage of 16 team",
-          "published": "2026-10-21"
+          "caption": "Sixth graders explored Amsa-dong Prehistoric Site, a Neolithic se",
+          "published": "2026-11-03"
         },
         {
-          "code": "Devm5JMAclZ",
-          "img": "assets/insta/kispride_Devm5JMAclZ.jpg",
+          "code": "DfRRYSsD_6L",
+          "img": "assets/insta/kispride_DfRRYSsD_6L.jpg",
           "video": false,
-          "caption": "The high school mock trial team participated in the biannual Kore",
-          "published": "2026-10-20"
+          "caption": "Elementary designers programmed robots to follow set paths, testi",
+          "published": "2026-11-02"
         },
         {
-          "code": "Des-Y9Tj81k",
-          "img": "assets/insta/kispride_Des-Y9Tj81k.jpg",
+          "code": "DfODm0oD4uW",
+          "img": "assets/insta/kispride_DfODm0oD4uW.jpg",
           "video": false,
-          "caption": "KIS hosted AISA varsity girls volleyball and our KIS team brought",
-          "published": "2026-10-19"
+          "caption": "The fall sports season wrapped with a celebration of our senior a",
+          "published": "2026-11-01"
         },
         {
-          "code": "DejDBsvD2oE",
-          "img": "assets/insta/kispride_DejDBsvD2oE.jpg",
+          "code": "DfEQPH5H0ch",
+          "img": "assets/insta/kispride_DfEQPH5H0ch.jpg",
           "video": false,
-          "caption": "Our student musicians bring their best to the stage. The high sch",
-          "published": "2026-10-16"
+          "caption": "Yesterday the middle school had their first social this school ye",
+          "published": "2026-10-28"
         },
         {
-          "code": "DedeJVvj6Cn",
-          "img": "assets/insta/kispride_DedeJVvj6Cn.jpg",
+          "code": "DfBtNWNEyKQ",
+          "img": "assets/insta/kispride_DfBtNWNEyKQ.jpg",
           "video": false,
-          "caption": "¡Hola! Middle school Spanish speakers practice greetings.\".",
-          "published": "2026-10-13"
+          "caption": "Happy Falloween! Our elementary school hosted a fun fall celebrat",
+          "published": "2026-10-27"
         }
       ]
     },
@@ -63,46 +63,46 @@ window.KIS_MEDIA = {
       "followers": null,
       "posts": [
         {
-          "code": "De6GH4ikrMq",
-          "img": "assets/insta/kis_athletics_De6GH4ikrMq.jpg",
-          "video": false,
-          "caption": "HOME GAME | Varsity Tennis\n\nOur Varsity Tennis played against",
-          "published": "2026-10-24"
+          "code": "DfTyojeR2LX",
+          "img": "assets/insta/kis_athletics_DfTyojeR2LX.jpg",
+          "video": true,
+          "caption": "Varsity Golf Mix.Mp4 KAIAC Combined Champions. V.C Leenah K.\".",
+          "published": "2026-11-03"
         },
         {
-          "code": "De1xatTEuVQ",
-          "img": "assets/insta/kis_athletics_De1xatTEuVQ.jpg",
+          "code": "DfTbQZjycWX",
+          "img": "assets/insta/kis_athletics_DfTbQZjycWX.jpg",
           "video": false,
-          "caption": "Varsity Golf are SCREEN GOLF CHAMPIONS!\n\nd.s Leah Y.\".",
-          "published": "2026-10-23"
+          "caption": "GET YOUR JACKETS THIS WEEK ATHLETES (only for those of you who ha",
+          "published": "2026-11-03"
         },
         {
-          "code": "De1vnrLy0bx",
-          "img": "assets/insta/kis_athletics_De1vnrLy0bx.jpg",
-          "video": false,
-          "caption": "Last weekend, our varsity cross country traveled to KAS. Over",
-          "published": "2026-10-23"
+          "code": "DfOpLorOaAk",
+          "img": "assets/insta/kis_athletics_DfOpLorOaAk.jpg",
+          "video": true,
+          "caption": "Varsity Tennis Mix.mp4 Tennis KAIAC : Boys 4th & Girls 2nd See yo",
+          "published": "2026-11-01"
         },
         {
-          "code": "Dexwnr1y14y",
-          "img": "assets/insta/kis_athletics_Dexwnr1y14y.jpg",
+          "code": "DfMpbTHykRI",
+          "img": "assets/insta/kis_athletics_DfMpbTHykRI.jpg",
           "video": false,
-          "caption": "In our own home court, our Varsity Girls Volleyball placed 2n",
-          "published": "2026-10-21"
+          "caption": "TRYOUTS START THIS TUESDAY GOOD LUCK TO EVERYONE 🔥🔥 D.S emma s\"",
+          "published": "2026-11-01"
         },
         {
-          "code": "DexwfwdSCMK",
-          "img": "assets/insta/kis_athletics_DexwfwdSCMK.jpg",
-          "video": false,
-          "caption": "Last weekend, at SOIS, our boys placed 3rd at AISA.\n\nd.s. Ale",
-          "published": "2026-10-21"
+          "code": "DfDysJKyA4M",
+          "img": "assets/insta/kis_athletics_DfDysJKyA4M.jpg",
+          "video": true,
+          "caption": "Our volleyball teams are KAIAC ready. SUPERCUP @SFS | Oct 30-31 V",
+          "published": "2026-10-28"
         },
         {
-          "code": "DeqwfxAkgQk",
-          "img": "assets/insta/kis_athletics_DeqwfxAkgQk.jpg",
+          "code": "DfBk6ghEjtu",
+          "img": "assets/insta/kis_athletics_DfBk6ghEjtu.jpg",
           "video": false,
-          "caption": "Varsity Tennis faced off against SIS, with the girls winning",
-          "published": "2026-10-19"
+          "caption": "TENNIS BLOWS IT OUT OF THE PARK WITH A 5 TO 0 KILL D.S. Tony Y, L",
+          "published": "2026-10-27"
         }
       ]
     },
@@ -110,46 +110,46 @@ window.KIS_MEDIA = {
       "followers": null,
       "posts": [
         {
+          "code": "DfS8cLnT4jY",
+          "img": "assets/insta/kisstuco_DfS8cLnT4jY.jpg",
+          "video": false,
+          "caption": "MAKE SURE TO BUY PEPEROGRAMS THIS WEEK FOR YOUR FRIENDS, TEACHERS",
+          "published": "2026-11-03"
+        },
+        {
+          "code": "De8u3KPhDfg",
+          "img": "assets/insta/kisstuco_De8u3KPhDfg.jpg",
+          "video": true,
+          "caption": "Dress up for Halloween Dress Up day on this Wednesday, October 28",
+          "published": "2026-10-26"
+        },
+        {
+          "code": "De6t488Byaj",
+          "img": "assets/insta/kisstuco_De6t488Byaj.jpg",
+          "video": false,
+          "caption": "GET READY FOR HALLOWEEN DRESS UP DAY!! ON OCTOBER 28TH WEDNESDAY ",
+          "published": "2026-10-25"
+        },
+        {
           "code": "Dey8trEhrYY",
           "img": "assets/insta/kisstuco_Dey8trEhrYY.jpg",
           "video": false,
-          "caption": "WHO IS READY FOR OREO ROULETTE? 🍪🎯\n\nFrom disgusting soy sauce to a",
+          "caption": "WHO IS READY FOR OREO ROULETTE? 🍪🎯\n\nFrom disgusting soy sauce to ",
           "published": "2026-10-22"
         },
         {
           "code": "DeoOKnMgYr2",
           "img": "assets/insta/kisstuco_DeoOKnMgYr2.jpg",
           "video": false,
-          "caption": "IT’S TIME FOR SPIRIT WEEK❗️😙 Here is a quick sneak peek of what sp",
+          "caption": "IT’S TIME FOR SPIRIT WEEK❗️😙 Here is a quick sneak peek of what s",
           "published": "2026-10-18"
         },
         {
           "code": "DeOlOzKBCnx",
           "img": "assets/insta/kisstuco_DeOlOzKBCnx.jpg",
           "video": false,
-          "caption": "HOMECOMING 2026‼️‼️EARLY BIRD TICKETS ARE ₩30,000 MAKE SURE YOU GET",
+          "caption": "HOMECOMING 2026‼️‼️EARLY BIRD TICKETS ARE ₩30,000 MAKE SURE YOU G",
           "published": "2026-10-08"
-        },
-        {
-          "code": "DeIvxD_B3iR",
-          "img": "assets/insta/kisstuco_DeIvxD_B3iR.jpg",
-          "video": false,
-          "caption": "WHO IS READY FOR SPIRIT WEEK?🙌👀\nGet ready for some exciting dress u",
-          "published": "2026-10-05"
-        },
-        {
-          "code": "Dd8XtUtAdc6",
-          "img": "assets/insta/kisstuco_Dd8XtUtAdc6.jpg",
-          "video": false,
-          "caption": "PATIO ON FIRE ON NOV 13TH‼️‼️\nIF YOU’RE INTERESTED IN PERFORMING, S",
-          "published": "2026-10-01"
-        },
-        {
-          "code": "DdYs12KhQJB",
-          "img": "assets/insta/kisstuco_DdYs12KhQJB.jpg",
-          "video": false,
-          "caption": "🍿StuCo is hosting the first popcorn event for the 26-27 school y",
-          "published": "2026-09-17"
         }
       ]
     }
