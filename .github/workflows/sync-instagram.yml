@@ -1,0 +1,51 @@
+name: Sync Instagram snapshot
+
+# Runs when the daily Instagram refresh pushes assets/instagram_queue.json.
+# Downloads the queued thumbnails (Instagram's CDN is reachable from GitHub's
+# runners), updates assets/media.js and commits, which redeploys on Vercel.
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - assets/instagram_queue.json
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+# Shared with the daily KIS data refresh so the two never push over each other.
+concurrency:
+  group: refresh-kis-data
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the default branch
+        uses: actions/checkout@v4
+
+      - name: Apply the Instagram queue
+        id: sync
+        continue-on-error: true
+        run: python3 sync_instagram.py
+
+      - name: Commit the Instagram snapshot
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A assets/media.js assets/insta assets/instagram_queue.json
+          if git diff --cached --quiet; then
+            echo "No Instagram changes to commit."
+            exit 0
+          fi
+          git commit -m "chore: sync Instagram feed"
+          git pull --rebase origin main
+          git push origin HEAD:main
+
+      - name: Report image download failures
+        if: steps.sync.outcome == 'failure'
+        run: |
+          echo "Some Instagram thumbnails could not be downloaded; those posts were skipped."
+          exit 1
